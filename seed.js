@@ -17,7 +17,7 @@ dht.put('sections', {
   2: 'Second section'
 }, cb)
 
-dht.put('topicsOfSection_1', {
+dht.put('topics', {
   5281416: {
     title: 'Hypertoad - God please destroy humanity',
     likes: 3,
