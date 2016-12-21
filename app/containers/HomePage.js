@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { search } from 'actions/topics'
 import Home from 'components/Home'
 
-export default class HomePage extends Component {
-  render() {
-    return (
-      <Home />
-    )
-  }
-}
+export default connect(
+  ({ topics: { topics, finded } }) => ({ topics, finded }),
+  { search }
+)(Home)

@@ -1,0 +1,5 @@
+export const ERROR_MESSAGE = 'ERROR_MESSAGE'
+export const SET_SEARCH_META = 'SET_SEARCH_META'
+export const SET_TOPICS = 'SET_TOPICS'
+export const DO_SEARCH = 'DO_SEARCH'
+export const SET_SEARCH_RESULT = 'SET_SEARCH_RESULT'

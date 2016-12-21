@@ -29,7 +29,7 @@ const enhancer = composeEnhancers(
   applyMiddleware(sagaMiddleware, router, logger)
 )
 
-export default function configureStore(initialState: {}) {
+export default function configureStore(initialState: {} | void) {
   const store = createStore(rootReducer, initialState, enhancer)
   sagaMiddleware.run(rootSaga)
 
