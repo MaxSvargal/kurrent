@@ -1,30 +1,49 @@
 import { fork, call, put, take, select } from 'redux-saga/effects'
 import Kad from 'services/kad'
 import { compress, decompress } from 'services/zlib'
-import { getSearchMeta } from 'sagas/selectors'
+import { selectSearchIndex } from 'sagas/selectors'
 
-import { setTopics, setSearchResult } from 'actions/topics'
+import { setSearchIndex, setTopic, setSearchResult } from 'actions/topics'
 import { errorMessage } from 'actions/utils'
-import { SET_TOPICS, DO_SEARCH, CREATE_TOPIC } from 'actions/types'
+import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, CREATE_TOPIC } from 'actions/types'
 
 const bootstrap = { address: '127.0.0.1', port: 1330 }
 const params = { address: '127.0.0.1', port: 1333 }
 const kad = new Kad(params)
 
-export function* fetchTopics() {
+export function* getTopicsFromIndex(searchIndex) {
+  /* eslint guard-for-in: 0 */
+  /* eslint no-restricted-syntax: 0 */
+  for (const key in searchIndex) {
+    yield fork(getTopic, key)
+  }
+}
+
+export function* getSearchIndex() {
   try {
-    const compressed = yield call(kad.get, 'topics')
-    const topics = yield call(decompress, compressed)
-    yield put(setTopics(topics))
+    const compressed = yield call(kad.get, 'searchIndex')
+    const searchIndex = yield call(decompress, compressed)
+    yield put(setSearchIndex(searchIndex))
+    yield fork(getTopicsFromIndex, searchIndex)
   } catch (err) {
-    yield put(errorMessage(SET_TOPICS, err))
+    yield put(errorMessage(SET_SEARCH_INDEX, err))
+  }
+}
+
+export function* getTopic(key) {
+  try {
+    const compressed = yield call(kad.get, key)
+    const topic = yield call(decompress, compressed)
+    yield put(setTopic(key, topic))
+  } catch (err) {
+    yield put(errorMessage(SET_TOPIC, err))
   }
 }
 
 export function* initial() {
   try {
     yield call(kad.connect, bootstrap)
-    yield fork(fetchTopics)
+    yield fork(getSearchIndex)
   } catch (err) {
     yield put(errorMessage('initial', err))
   }
@@ -34,7 +53,7 @@ export function* search() {
   while (true) {
     try {
       const { value } = yield take(DO_SEARCH)
-      const meta = yield select(getSearchMeta)
+      const meta = yield select(selectSearchIndex)
       const finded = Object.keys(meta).reduce((arr, id) =>
         (meta[id].includes(value) ? [ ...arr, id ] : arr), [])
       yield put(setSearchResult(finded))

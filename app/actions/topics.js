@@ -1,7 +1,11 @@
 import { action } from 'actions/utils'
 import * as actions from 'actions/types'
 
-export const setTopics = topics => action(actions.SET_TOPICS, { payload: topics })
+/* for reducers */
+export const setTopic = (key, value) => action(actions.SET_TOPIC, { payload: { key, value } })
+export const setSearchIndex = payload => action(actions.SET_SEARCH_INDEX, { payload })
+export const setSearchResult = payload => action(actions.SET_SEARCH_RESULT, { payload })
+
+/* for sagas */
 export const search = value => action(actions.DO_SEARCH, { value })
-export const setSearchResult = ids => action(actions.SET_SEARCH_RESULT, { payload: ids })
 export const createTopic = (key, value) => action(actions.CREATE_TOPIC, { key, value })

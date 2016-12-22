@@ -49,7 +49,14 @@ const topics = {
   }
 }
 
-const input = new Buffer(JSON.stringify(topics), 'utf8')
+const toBuffer = obj => new Buffer(JSON.stringify(obj), 'utf8')
 
-zlib.deflateRaw(input, (err, buffer) =>
-  dht.put('topics', buffer.toString('base64'), cb))
+const searchIndex = Object.keys(topics).reduce((obj, id) =>
+  Object.assign({}, obj, { [id]: topics[id].title }), {})
+
+zlib.deflateRaw(toBuffer(searchIndex), (err, buffer) =>
+  dht.put('searchIndex', buffer.toString('base64'), cb))
+
+Object.keys(topics).forEach(id =>
+  zlib.deflateRaw(toBuffer(topics[id]), (err, buffer) =>
+    dht.put(id, buffer.toString('base64'), cb)))

@@ -1,2 +1,2 @@
-export const getSearchMeta = state => state.topics.searchMeta
+export const selectSearchIndex = state => state.topics.searchIndex
 export const foo = 'bar'
