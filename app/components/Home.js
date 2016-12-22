@@ -14,11 +14,15 @@ export default class Home extends Component {
       }
     },
     finded: string[],
-    search: () => void
+    search: () => void,
+    createTopic: () => void
   }
 
   searchHandle = (event: { target: { value: string } }) =>
     this.props.search(event.target.value)
+
+  createTopicHandle = () =>
+    this.props.createTopic('sha1key', { title: 'zerovalue' })
 
   render() {
     const { topics, finded } = this.props
@@ -30,6 +34,10 @@ export default class Home extends Component {
           onChange={ this.searchHandle }
           placeholder='Search...'
           style={ { padding: '2%', marginBottom: '1rem', width: '95%' } } />
+
+        <button onClick={ this.createTopicHandle }>
+          Create demo topic
+        </button>
 
         { ids.map(id => (
           <div key={ id } >
