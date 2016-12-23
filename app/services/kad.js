@@ -1,13 +1,25 @@
 import kad from 'kad'
-import os from 'os'
+import EventEmitter from 'events'
 
 export default class Kad {
   constructor(props: { address: string, port: number }): {} {
-    this.selfContact = kad.contacts.AddressPortContact(props)
-    const transport = kad.transports.UDP(this.selfContact)
-    const storage = kad.storage.FS(`${os.tmpdir()}/kad`)
+    const self = kad.contacts.AddressPortContact(props)
+    const transport = kad.transports.UDP(self)
+    const storage = new kad.storage.LocalStorage('kad')
+
     this.dht = new kad.Node({ transport, storage })
+    this.events = new EventEmitter()
+    this.registerReceiveHook(transport)
+
     return this
+  }
+
+  registerReceiveHook = transport => {
+    transport.before('receive', (message, contact, next) => {
+      message.method &&
+        this.events.emit(message.method, { message, contact })
+      return next()
+    })
   }
 
   connect = (seed: { address: string, port: number }): Promise =>

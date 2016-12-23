@@ -1,7 +1,9 @@
 import { fork, call, put, take, select } from 'redux-saga/effects'
+import { eventChannel, END } from 'redux-saga'
+
 import Kad from 'services/kad'
 import { compress, decompress } from 'services/zlib'
-import { selectSearchIndex } from 'sagas/selectors'
+import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
 import { setSearchIndex, setTopic, setSearchResult } from 'actions/topics'
 import { errorMessage } from 'actions/utils'
@@ -11,12 +13,32 @@ const bootstrap = { address: '127.0.0.1', port: 1330 }
 const params = { address: '127.0.0.1', port: 1333 }
 const kad = new Kad(params)
 
+function kadReceiveStoreChannel() {
+  return eventChannel(emitter => {
+    const handler = resp => emitter(resp)
+    kad.events.on('STORE', handler)
+    return () => kad.events.removeListener('STORE', handler)
+  })
+}
+
+export function* listenStoreChannel() {
+  try {
+    const channel = yield call(kadReceiveStoreChannel)
+
+    while (true) {
+      const { message: { params: { item } } } = yield take(channel)
+      const value = yield call(decompress, item.value)
+      yield put(setTopic(item.key, value))
+    }
+  } catch (err) {
+    yield put(errorMessage('kadReceiveStoreChannel', err))
+  }
+}
+
 export function* getTopicsFromIndex(searchIndex) {
   /* eslint guard-for-in: 0 */
   /* eslint no-restricted-syntax: 0 */
-  for (const key in searchIndex) {
-    yield fork(getTopic, key)
-  }
+  for (const key in searchIndex) yield fork(getTopic, key)
 }
 
 export function* getSearchIndex() {
@@ -24,7 +46,7 @@ export function* getSearchIndex() {
     const compressed = yield call(kad.get, 'searchIndex')
     const searchIndex = yield call(decompress, compressed)
     yield put(setSearchIndex(searchIndex))
-    yield fork(getTopicsFromIndex, searchIndex)
+    // yield fork(getTopicsFromIndex, searchIndex)
   } catch (err) {
     yield put(errorMessage(SET_SEARCH_INDEX, err))
   }
@@ -44,6 +66,7 @@ export function* initial() {
   try {
     yield call(kad.connect, bootstrap)
     yield fork(getSearchIndex)
+    yield fork(listenStoreChannel)
   } catch (err) {
     yield put(errorMessage('initial', err))
   }
@@ -57,6 +80,9 @@ export function* search() {
       const finded = Object.keys(meta).reduce((arr, id) =>
         (meta[id].includes(value) ? [ ...arr, id ] : arr), [])
       yield put(setSearchResult(finded))
+
+      const missed = yield select(getMissedTopics, finded)
+      for (const key in missed) yield fork(getTopic, key)
     } catch (err) {
       yield put(errorMessage(DO_SEARCH, err))
     }
