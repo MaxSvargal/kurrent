@@ -2,16 +2,18 @@ import { fork, call, put, take, select } from 'redux-saga/effects'
 import { eventChannel, throttle } from 'redux-saga'
 
 import Kad from 'services/kad'
+import TorrentDHT from 'services/dht'
 import { compress, decompress } from 'services/zlib'
 import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
-import { setSearchIndex, setTopic, setSearchResult, getPeersNum } from 'actions/topics'
 import { errorMessage } from 'actions/utils'
+import { setSearchIndex, setTopic, setSearchResult, setPeersNum } from 'actions/topics'
 import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, CREATE_TOPIC } from 'actions/types'
 
 const bootstrap = { address: '127.0.0.1', port: 1330 }
 const params = { address: '127.0.0.1', port: 1333 }
 const kad = new Kad(params)
+const dht = new TorrentDHT()
 
 function kadReceiveStoreChannel() {
   return eventChannel(emitter => {
@@ -31,7 +33,7 @@ export function* listenStoreChannel() {
       yield put(setTopic(item.key, value))
     }
   } catch (err) {
-    yield put(errorMessage('kadReceiveStoreChannel', err))
+    yield put(errorMessage(err, 'kadReceiveStoreChannel'))
   }
 }
 
@@ -48,8 +50,13 @@ export function* getSearchIndex() {
     yield put(setSearchIndex(searchIndex))
     // yield fork(getTopicsFromIndex, searchIndex)
   } catch (err) {
-    yield put(errorMessage(SET_SEARCH_INDEX, err))
+    yield put(errorMessage(err, SET_SEARCH_INDEX))
   }
+}
+
+export function* requestPeersNum(key, magnet) {
+  const peersNum = yield call(dht.lookupPeers, magnet)
+  yield put(setPeersNum(key, peersNum))
 }
 
 export function* getTopic(key) {
@@ -57,9 +64,9 @@ export function* getTopic(key) {
     const compressed = yield call(kad.get, key)
     const topic = yield call(decompress, compressed)
     yield put(setTopic(key, topic))
-    yield put(getPeersNum(key, topic.magnet))
+    yield call(requestPeersNum, key, topic.magnet)
   } catch (err) {
-    yield put(errorMessage(SET_TOPIC, err))
+    yield put(errorMessage(err, SET_TOPIC))
   }
 }
 
@@ -69,7 +76,7 @@ export function* initial() {
     yield fork(getSearchIndex)
     yield fork(listenStoreChannel)
   } catch (err) {
-    yield put(errorMessage('initial', err))
+    yield put(errorMessage(err, 'initialDHT'))
   }
 }
 
@@ -83,7 +90,7 @@ export function* doSearchHandle({ value }) {
     const missed = yield select(getMissedTopics, finded)
     for (const key in missed) yield fork(getTopic, missed[key])
   } catch (err) {
-    yield put(errorMessage(DO_SEARCH, err))
+    yield put(errorMessage(err, DO_SEARCH))
   }
 }
 
@@ -98,12 +105,12 @@ export function* create() {
       const copressed = yield call(compress, value)
       yield call(kad.put, key, copressed)
     } catch (err) {
-      yield put(errorMessage(CREATE_TOPIC, err))
+      yield put(errorMessage(err, CREATE_TOPIC))
     }
   }
 }
 
-export default function* dht() {
+export default function* startupSagas() {
   yield [
     fork(initial),
     fork(search),

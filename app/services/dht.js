@@ -1,7 +1,7 @@
 import DHT from 'bittorrent-dht'
 import magnet from 'magnet-uri'
 
-export default class DHTClient {
+export default class TorrentDHT {
   constructor(): {} {
     this.dht = new DHT()
     return this
