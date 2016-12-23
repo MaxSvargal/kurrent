@@ -23,7 +23,7 @@ const topics = {
     updated: 1482366025578,
     likes: 3,
     dislikes: 1,
-    magnet: 'magnet:?xt=urn:ed2k:31D6CFE0D16AE931B73C59D7E0C089C0&xl=0&dn=zero_len.fil&xt=urn:bitprint:3I42H3S6NNFQ2MSVX7XZKYAYSCX5QBYJ.LWPNACQDBZRYXW3VHJVCJ64QBZNGHOHHHZWCLNQ&xt=urn:md5:D41D8CD98F00B204E9800998ECF8427E&dn'
+    magnet: 'magnet:?xt=urn:btih:b482ecc23e6539ad99f7a9582a9e3e71f15eb732&dn=Exxxtrasmall+-Sweet+Little+Treats+-+Cara+Stone+%5B1080p%5D.mp4&tr=udp%3A//tracker.leechers-paradise.org%3A6969&tr=udp%3A//zer0day.ch%3A1337&tr=udp%3A//open.demonii.com%3A1337&tr=udp%3A//tracker.coppersurfer.tk%3A6969&tr=udp%3A//exodus.desync.com%3A6969'
   },
   '5a086977df384b52839ec80a6692740a055a76e7': {
     title: '(Irish-Punk/Celtic-Punk) VA - Tribute To The Pogues - 2016',
@@ -34,7 +34,7 @@ const topics = {
     updated: 1482366037716,
     likes: 3,
     dislikes: 1,
-    magnet: 'magnet:?xt=urn:ed2k:31D6CFE0D16AE931B73C59D7E0C089C0&xl=0&dn=zero_len.fil&xt=urn:bitprint:3I42H3S6NNFQ2MSVX7XZKYAYSCX5QBYJ.LWPNACQDBZRYXW3VHJVCJ64QBZNGHOHHHZWCLNQ&xt=urn:md5:D41D8CD98F00B204E9800998ECF8427E&dn'
+    magnet: 'magnet:?xt=urn:btih:b482ecc23e6539ad99f7a9582a9e3e71f15eb732&dn=Exxxtrasmall+-Sweet+Little+Treats+-+Cara+Stone+%5B1080p%5D.mp4&tr=udp%3A//tracker.leechers-paradise.org%3A6969&tr=udp%3A//zer0day.ch%3A1337&tr=udp%3A//open.demonii.com%3A1337&tr=udp%3A//tracker.coppersurfer.tk%3A6969&tr=udp%3A//exodus.desync.com%3A6969'
   },
   '97b519972dd497d9a3624dd736477d9c5cd42b75': {
     title: '(Ambient, Drone, Ritual) Creation VI - Myth About Flat World - 2015',
@@ -45,7 +45,7 @@ const topics = {
     updated: 1482366000260,
     likes: 10,
     dislikes: 2,
-    magnet: 'magnet:?xt=urn:ed2k:31D6CFE0D16AE931B73C59D7E0C089C0&xl=0&dn=zero_len.fil&xt=urn:bitprint:3I42H3S6NNFQ2MSVX7XZKYAYSCX5QBYJ.LWPNACQDBZRYXW3VHJVCJ64QBZNGHOHHHZWCLNQ&xt=urn:md5:D41D8CD98F00B204E9800998ECF8427E&dn'
+    magnet: 'magnet:?xt=urn:btih:b482ecc23e6539ad99f7a9582a9e3e71f15eb732&dn=Exxxtrasmall+-Sweet+Little+Treats+-+Cara+Stone+%5B1080p%5D.mp4&tr=udp%3A//tracker.leechers-paradise.org%3A6969&tr=udp%3A//zer0day.ch%3A1337&tr=udp%3A//open.demonii.com%3A1337&tr=udp%3A//tracker.coppersurfer.tk%3A6969&tr=udp%3A//exodus.desync.com%3A6969'
   }
 }
 

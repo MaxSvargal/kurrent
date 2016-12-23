@@ -1,11 +1,11 @@
 import { fork, call, put, take, select } from 'redux-saga/effects'
-import { eventChannel, END } from 'redux-saga'
+import { eventChannel, throttle } from 'redux-saga'
 
 import Kad from 'services/kad'
 import { compress, decompress } from 'services/zlib'
 import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
-import { setSearchIndex, setTopic, setSearchResult } from 'actions/topics'
+import { setSearchIndex, setTopic, setSearchResult, getPeersNum } from 'actions/topics'
 import { errorMessage } from 'actions/utils'
 import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, CREATE_TOPIC } from 'actions/types'
 
@@ -57,6 +57,7 @@ export function* getTopic(key) {
     const compressed = yield call(kad.get, key)
     const topic = yield call(decompress, compressed)
     yield put(setTopic(key, topic))
+    yield put(getPeersNum(key, topic.magnet))
   } catch (err) {
     yield put(errorMessage(SET_TOPIC, err))
   }
@@ -72,21 +73,22 @@ export function* initial() {
   }
 }
 
-export function* search() {
-  while (true) {
-    try {
-      const { value } = yield take(DO_SEARCH)
-      const meta = yield select(selectSearchIndex)
-      const finded = Object.keys(meta).reduce((arr, id) =>
-        (meta[id].includes(value) ? [ ...arr, id ] : arr), [])
-      yield put(setSearchResult(finded))
+export function* doSearchHandle({ value }) {
+  try {
+    const meta = yield select(selectSearchIndex)
+    const finded = Object.keys(meta).reduce((arr, id) =>
+      (meta[id].includes(value) ? [ ...arr, id ] : arr), [])
+    yield put(setSearchResult(finded))
 
-      const missed = yield select(getMissedTopics, finded)
-      for (const key in missed) yield fork(getTopic, key)
-    } catch (err) {
-      yield put(errorMessage(DO_SEARCH, err))
-    }
+    const missed = yield select(getMissedTopics, finded)
+    for (const key in missed) yield fork(getTopic, missed[key])
+  } catch (err) {
+    yield put(errorMessage(DO_SEARCH, err))
   }
+}
+
+export function* search() {
+  yield throttle(600, DO_SEARCH, doSearchHandle)
 }
 
 export function* create() {

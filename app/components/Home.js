@@ -17,6 +17,7 @@ export default class Home extends Component {
     },
     ids: string[],
     finded: string[],
+    peersNum: {},
     search: () => void,
     createTopic: () => void
   }
@@ -28,7 +29,7 @@ export default class Home extends Component {
     this.props.createTopic('sha1key', { title: 'zerovalue' })
 
   render() {
-    const { entities, ids, finded } = this.props
+    const { entities, ids, finded, peersNum } = this.props
     const styles = this.getStyles()
     const topicIds = finded.length > 0 ? finded : ids
 
@@ -44,9 +45,13 @@ export default class Home extends Component {
         </div>
 
         <div style={ styles.list }>
-          { topicIds.map(id => (
+          { topicIds.map(id => entities[id] && (
             <div key={ id } >
               <Link to={ `topic/${id}` }>{ entities[id].title }</Link>
+              { peersNum[id] &&
+                <div style={ styles.peersNum }>
+                  Peers: { peersNum[id] }
+                </div> }
               <p>{ entities[id].desc }</p>
             </div>
           )) }
@@ -70,6 +75,13 @@ export default class Home extends Component {
       btn: {
         margin: '1rem',
         fontSize: '1.34rem'
+      },
+      peersNum: {
+        background: 'green',
+        color: 'white',
+        fontWeight: 'bold',
+        padding: '.5rem',
+        margin: '.5rem'
       }
     }
   }

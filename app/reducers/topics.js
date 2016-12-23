@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { SET_TOPIC, SET_SEARCH_RESULT, SET_SEARCH_INDEX } from 'actions/types'
+import { SET_TOPIC, SET_SEARCH_RESULT, SET_SEARCH_INDEX, SET_PEERS_NUM } from 'actions/types'
 
 type reducerArgs = { type: string, payload: ?{} }
 
@@ -15,4 +15,7 @@ export const finded = (state = [], { type, payload }: reducerArgs) =>
 export const searchIndex = (state = {}, { type, payload }: reducerArgs) =>
   type === SET_SEARCH_INDEX ? payload : state
 
-export default combineReducers({ entities, ids, searchIndex, finded })
+export const peersNum = (state = {}, { type, payload }: reducerArgs) =>
+  type === SET_PEERS_NUM ? { ...state, [payload.key]: payload.peersNum } : state
+
+export default combineReducers({ entities, ids, searchIndex, finded, peersNum })
