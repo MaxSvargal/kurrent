@@ -3,6 +3,6 @@ import { search, createTopic } from 'actions/topics'
 import Home from 'components/Home'
 
 export default connect(
-  ({ topics: { topics, finded } }) => ({ topics, finded }),
+  ({ topics: { entities, finded } }) => ({ entities, finded }),
   { search, createTopic }
 )(Home)

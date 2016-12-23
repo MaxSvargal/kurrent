@@ -6,7 +6,7 @@ import SearchInput from './SearchInput'
 
 export default class Home extends Component {
   props: {
-    topics: {
+    entities: {
       [id: string]: {
         title: string,
         desc: string,
@@ -27,15 +27,15 @@ export default class Home extends Component {
     this.props.createTopic('sha1key', { title: 'zerovalue' })
 
   render() {
-    const { topics, finded } = this.props
+    const { entities, finded } = this.props
     const styles = this.getStyles()
-    const ids = finded.length > 0 ? finded : Object.keys(topics)
+    const ids = finded.length > 0 ? finded : Object.keys(entities)
 
     return (
       <div>
         <div style={ styles.centered(finded.length > 0) } >
           <SearchInput onChange={ this.searchHandle } />
-          <div>i.e. year 2015 or 1016</div>
+          <div>i.e. year 2015 or 2016</div>
           <button onClick={ this.createTopicHandle } style={ styles.btn }>
             Create demo topic
           </button>
@@ -44,8 +44,8 @@ export default class Home extends Component {
         <div style={ styles.list }>
           { ids.map(id => (
             <div key={ id } >
-              <Link to={ `topic/${id}` }>{ topics[id].title }</Link>
-              <p>{ topics[id].desc }</p>
+              <Link to={ `topic/${id}` }>{ entities[id].title }</Link>
+              <p>{ entities[id].desc }</p>
             </div>
           )) }
         </div>
