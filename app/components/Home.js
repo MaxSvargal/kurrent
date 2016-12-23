@@ -15,6 +15,7 @@ export default class Home extends Component {
         magnet: string
       }
     },
+    ids: string[],
     finded: string[],
     search: () => void,
     createTopic: () => void
@@ -27,13 +28,14 @@ export default class Home extends Component {
     this.props.createTopic('sha1key', { title: 'zerovalue' })
 
   render() {
-    const { entities, finded } = this.props
+    const { entities, ids, finded } = this.props
     const styles = this.getStyles()
-    const ids = finded.length > 0 ? finded : Object.keys(entities)
+    const topicIds = finded.length > 0 ? finded : ids
 
     return (
       <div>
         <div style={ styles.centered(finded.length > 0) } >
+          <div>{ ids.length } topics in index</div>
           <SearchInput onChange={ this.searchHandle } />
           <div>i.e. year 2015 or 2016</div>
           <button onClick={ this.createTopicHandle } style={ styles.btn }>
@@ -42,7 +44,7 @@ export default class Home extends Component {
         </div>
 
         <div style={ styles.list }>
-          { ids.map(id => (
+          { topicIds.map(id => (
             <div key={ id } >
               <Link to={ `topic/${id}` }>{ entities[id].title }</Link>
               <p>{ entities[id].desc }</p>
