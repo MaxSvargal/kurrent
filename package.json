@@ -22,10 +22,7 @@
     "package": "npm run build && build --publish never",
     "package-win": "npm run build && build --win --x64",
     "package-linux": "npm run build && build --linux",
-    "package-all": "npm run build && build -mwl",
-    "seed": "node ./seed.js",
-    "pusher": "node ./pusher.js",
-    "heroku-postbuild": "npm run seed"
+    "package-all": "npm run build && build -mwl"
   },
   "build": {
     "productName": "ElectronReact",
