@@ -24,7 +24,8 @@
     "package-linux": "npm run build && build --linux",
     "package-all": "npm run build && build -mwl",
     "seed": "node ./seed.js",
-    "pusher": "node ./pusher.js"
+    "pusher": "node ./pusher.js",
+    "heroku-postbuild": "npm run seed"
   },
   "build": {
     "productName": "ElectronReact",
