@@ -1,6 +1,7 @@
 import kad from 'kad'
 import traverse from 'kad-traverse'
 import EventEmitter from 'events'
+import { eventChannel } from 'redux-saga'
 
 const transportProps = {
   traverse: {
@@ -19,18 +20,18 @@ export default class Kad {
 
     this.dht = new kad.Node({ transport, storage })
     this.events = new EventEmitter()
-    this.registerReceiveHook(transport)
+    this.transport = transport
 
     return this
   }
 
-  registerReceiveHook = transport => {
-    transport.before('receive', (message, contact, next) => {
-      message.method &&
-        this.events.emit(message.method, { message, contact })
+  receiveStoreChannel = () => eventChannel(emitter => {
+    this.transport.before('receive', (message, contact, next) => {
+      message.method === 'STORE' && emitter(message.method, { message, contact })
       return next()
     })
-  }
+    return () => {} // no unsubscriber
+  })
 
   connect = (seed: { address: string, port: number }): Promise =>
     new Promise((resolve, reject) =>

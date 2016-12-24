@@ -1,5 +1,5 @@
 import { fork, call, put, take, select } from 'redux-saga/effects'
-import { eventChannel, throttle } from 'redux-saga'
+import { throttle } from 'redux-saga'
 
 import Kad from 'services/kad'
 import TorrentDHT from 'services/dht'
@@ -10,22 +10,14 @@ import { errorMessage } from 'actions/utils'
 import { setSearchIndex, setTopic, setSearchResult, setPeersNum } from 'actions/topics'
 import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, CREATE_TOPIC } from 'actions/types'
 
-const bootstrap = { address: '127.0.0.1', port: 1330 }
+const bootstrap = { address: 'ec2-52-23-204-215.compute-1.amazonaws.com', port: 1330 }
 const params = { address: '127.0.0.1', port: 1333 }
 const kad = new Kad(params)
 const dht = new TorrentDHT()
 
-function kadReceiveStoreChannel() {
-  return eventChannel(emitter => {
-    const handler = resp => emitter(resp)
-    kad.events.on('STORE', handler)
-    return () => kad.events.removeListener('STORE', handler)
-  })
-}
-
 export function* listenStoreChannel() {
   try {
-    const channel = yield call(kadReceiveStoreChannel)
+    const channel = yield call(kad.receiveStoreChannel)
 
     while (true) {
       const { message: { params: { item } } } = yield take(channel)
