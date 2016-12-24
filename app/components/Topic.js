@@ -2,9 +2,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
-import SearchInput from './SearchInput'
-
-export default class Home extends Component {
+export default class Topic extends Component {
   props: {
     id: string,
     topic: {

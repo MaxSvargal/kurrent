@@ -21,6 +21,7 @@ const pushTopic = () => {
   const currentTime = new Date().getTime()
   const key = crypto.createHash('sha1').update(currentTime.toString()).digest('hex')
   const topic = {
+    key,
     title: `Generated title at ${currentTime} #${key}`,
     header: `Generated #${key}`,
     desc: `Generated description for #${key}`,

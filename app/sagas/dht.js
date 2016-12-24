@@ -82,9 +82,12 @@ export function* initial() {
 
 export function* doSearchHandle({ value }) {
   try {
+    if (value.length < 3) return
+
     const meta = yield select(selectSearchIndex)
+    const searchRegExp = new RegExp(`(?=${value}){3,}.*$`, 'i')
     const finded = Object.keys(meta).reduce((arr, id) =>
-      (meta[id].includes(value) ? [ ...arr, id ] : arr), [])
+      (meta[id].search(searchRegExp) !== -1 ? [ ...arr, id ] : arr), [])
     yield put(setSearchResult(finded))
 
     const missed = yield select(getMissedTopics, finded)
