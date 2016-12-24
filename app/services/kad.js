@@ -1,10 +1,20 @@
 import kad from 'kad'
+import traverse from 'kad-traverse'
 import EventEmitter from 'events'
+
+const transportProps = {
+  traverse: {
+    upnp: { forward: 1330, ttl: 6000 },
+    stun: { server: { address: 'stun1.l.google.com', port: 19302 } },
+    turn: false
+  }
+}
 
 export default class Kad {
   constructor(props: { address: string, port: number }): {} {
-    const self = kad.contacts.AddressPortContact(props)
-    const transport = kad.transports.UDP(self)
+    const contact = kad.contacts.AddressPortContact(props)
+    const NatTransport = traverse.TransportDecorator(kad.transports.UDP)
+    const transport = new NatTransport(contact, transportProps)
     const storage = new kad.storage.LocalStorage('kad')
 
     this.dht = new kad.Node({ transport, storage })
