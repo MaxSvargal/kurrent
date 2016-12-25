@@ -154,6 +154,7 @@
   "dependencies": {
     "bittorrent-dht": "^7.4.0",
     "electron-debug": "^1.1.0",
+    "ip": "^1.1.4",
     "kad": "^1.6.4",
     "kad-traverse": "0.0.4",
     "magnet-uri": "^5.1.5",

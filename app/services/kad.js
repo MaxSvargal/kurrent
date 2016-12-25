@@ -1,21 +1,14 @@
 import kad from 'kad'
-import traverse from 'kad-traverse'
+// import traverse from 'kad-traverse'
 import EventEmitter from 'events'
 import { eventChannel } from 'redux-saga'
 
-const transportProps = {
-  traverse: {
-    upnp: { forward: 1330, ttl: 6000 },
-    stun: { server: { address: 'stun1.l.google.com', port: 19302 } },
-    turn: false
-  }
-}
+import KadUDPStunTransport from './kadUDPStunTransport'
 
 export default class Kad {
   constructor(props: { address: string, port: number }): {} {
     const contact = kad.contacts.AddressPortContact(props)
-    const NatTransport = traverse.TransportDecorator(kad.transports.UDP)
-    const transport = new NatTransport(contact, transportProps)
+    const transport = new KadUDPStunTransport(contact, { address: 'stun1.l.google.com', port: 19302 })
     const storage = new kad.storage.LocalStorage('kad')
 
     this.dht = new kad.Node({ transport, storage })
