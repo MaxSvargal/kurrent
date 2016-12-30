@@ -13,7 +13,7 @@ export default class SearchInput extends Component {
     return (
       <div style={ styles.root }>
         <div style={ styles.stats }>{ indexSize } topics in index</div>
-        <Link to='/new' style={ styles.btn }>+ torrent</Link>
+        <Link to='/topics/new' style={ styles.btn }>+ torrent</Link>
       </div>
     )
   }

@@ -153,20 +153,24 @@
   },
   "dependencies": {
     "bittorrent-dht": "^7.4.0",
+    "drag-drop": "^2.12.1",
     "electron-debug": "^1.1.0",
     "ip": "^1.1.4",
     "kad": "^1.6.4",
     "kad-traverse": "0.0.4",
     "magnet-uri": "^5.1.5",
+    "quill": "^1.1.8",
     "radium": "^0.18.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
+    "react-quill": "git+https://github.com/zenoamaro/react-quill.git",
     "react-redux": "^4.4.6",
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.7",
     "redux": "^3.6.0",
     "redux-saga": "^0.13.0",
-    "source-map-support": "^0.4.6"
+    "source-map-support": "^0.4.6",
+    "webtorrent": "^0.98.0"
   },
   "devEngines": {
     "node": ">=6.x",
