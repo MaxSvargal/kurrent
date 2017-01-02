@@ -17,7 +17,6 @@ class BackLink extends Component {
           color: '#b2b1b2',
           fontFamily: 'PT Sans',
           fontSize: '1.2rem',
-          margin: '1rem 2rem',
           padding: '.5rem 1rem'
         } }
         onClick={ this.props.router.goBack } >

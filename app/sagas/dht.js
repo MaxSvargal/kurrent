@@ -8,7 +8,7 @@ import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
 import { errorMessage } from 'actions/utils'
 import { setSearchIndex, setTopic, setSearchResult, setPeersNum } from 'actions/topics'
-import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, CREATE_TOPIC } from 'actions/types'
+import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, PUT_TOPIC } from 'actions/types'
 
 const bootstrap = { address: 'ec2-52-23-204-215.compute-1.amazonaws.com', port: 1330 }
 const params = { address: '127.0.0.1', port: 1333 }
@@ -93,15 +93,11 @@ export function* search() {
   yield throttle(600, DO_SEARCH, doSearchHandle)
 }
 
-export function* create() {
+export function* putTopicWatcher() {
   while (true) {
-    try {
-      const { key, value } = yield take(CREATE_TOPIC)
-      const copressed = yield call(compress, value)
-      yield call(kad.put, key, copressed)
-    } catch (err) {
-      yield put(errorMessage(err, CREATE_TOPIC))
-    }
+    const { key, value } = yield take(PUT_TOPIC)
+    const compressed = yield call(compress, value)
+    yield call(kad.put, key, compressed)
   }
 }
 
@@ -109,6 +105,6 @@ export default function* startupSagas() {
   yield [
     fork(initial),
     fork(search),
-    fork(create)
+    fork(putTopicWatcher)
   ]
 }

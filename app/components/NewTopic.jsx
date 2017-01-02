@@ -7,53 +7,56 @@ import DragDrop from 'components/DragDrop'
 import BackLink from 'components/BackLink'
 
 export default class NewTopic extends Component {
-
-  state = {
-    tags: [],
-    files: [],
-    dropDownBoxShow: false,
-    showDragDrop: true,
-    showSidebar: false,
-    headerInputValue: ''
+  props: {
+    createTopic: () => void
   }
 
-  onSubmitHandle(event) {
+  state = {
+    body: '',
+    keywords: '',
+    name: '',
+    tags: [],
+    files: [],
+    showCatalogPopup: false
+  }
+
+  onSubmitHandle = event => {
+    const { body, files, keywords, name, tags } = this.state
+    this.props.createTopic({ body, files, keywords, name, tags })
     event.preventDefault()
   }
 
-  handleEditorChange = value => {
-    console.log('Content was updated:', value)
-  }
+  getKeywords = (name, tags) =>
+    tags.length > 0 ? `${name} ${tags.join(', ')}` : name
 
-  onHeaderInputChange = () =>
-    this.setState({ titleInputValue: this.getTitleInputValue(this.state.tags) })
-    // (this.titleInput.value = this.state.tags.length > 0 ?
-    //   this.getTitleInputValue() : e.target.value)
-
-  getTitleInputValue = tags =>
-    tags.length > 0 ?
-      `${this.headerInput.value} ${tags.join(', ')}` :
-      this.headerInput.value
-
-  onTitleInputChange = event =>
-    this.setState({ titleInputValue: event.target.value })
-
-  onAddTagClickHandle = () =>
-    this.setState({ dropDownBoxShow: true })
-
-  onSelectTagHandle = (section, subsection) => {
-    const tag = `#${subsection.toLowerCase().replace(' ', '_')}`
-    const sectionTag = `#${section.toLowerCase().replace(' ', '_')}`
-    const tags = [ ...new Set([ ...this.state.tags, tag, sectionTag ]) ]
-    const titleInputValue = this.getTitleInputValue(tags)
-    this.setState({ tags, titleInputValue, dropDownBoxShow: false })
-  }
+  onNameInputChange = event =>
+    this.setState({
+      name: event.target.value,
+      keywords: this.getKeywords(event.target.value, this.state.tags)
+    })
 
   onDropFiles = files =>
-    this.setState({ files, showDragDrop: false })
+    this.setState({ files: [ ...this.state.files, ...files ] })
+
+  onAddTagClick = () =>
+    this.setState({ showCatalogPopup: true })
+
+  onKeywordsInputChange = event =>
+    this.setState({ keywords: event.target.value })
+
+  onChangeBody = body =>
+    this.setState({ body })
+
+  onSelectTag = (section, subsection) => {
+    const toTag = tag => `#${tag.toLowerCase().replace(' ', '_')}`
+    const tagsArr = [ ...this.state.tags, toTag(section), toTag(subsection) ]
+    const tags = [ ...new Set(tagsArr) ]
+    const keywords = this.getKeywords(this.state.name, tags)
+    this.setState({ tags, keywords })
+  }
 
   render() {
-    const { dropDownBoxShow, showDragDrop, tags, files } = this.state
+    const { tags, files, keywords, showCatalogPopup } = this.state
     const styles = this.getStyles()
 
     return (
@@ -61,66 +64,69 @@ export default class NewTopic extends Component {
         <BackLink />
         <form id='topicForm' >
 
-          { showDragDrop &&
-            <DragDrop onDrop={ this.onDropFiles } /> }
-
-          { files.length > 0 &&
-            <div style={ styles.sidebarList } >
-              { files.map((file, index) => (
-                <div key={ index } >
-                  <span>{ file.name } { ' ' }</span>
-                  <small>{ file.size } bytes</small>
-                </div>
-              )) }
-            </div> }
+          <div style={ styles.row } >
+            <div style={ styles.flexRow } >
+              { files.length > 0 &&
+                <div style={ styles.filesList } >
+                  { files.map((file, index) => (
+                    <div key={ index } >
+                      <span>{ file.name } { ' ' }</span>
+                      <small>{ file.size } bytes</small>
+                    </div>
+                  )) }
+                </div> }
+              <div style={ styles.dropFilesBox } >
+                <DragDrop onDrop={ this.onDropFiles } />
+              </div>
+            </div>
+          </div>
 
           <div style={ styles.row } >
-            <label htmlFor='header' style={ styles.label }>
-              Header for list view
+            <label htmlFor='name' style={ styles.label }>
+              Short name
             </label>
             <input
-              name='header'
+              name='name'
               style={ styles.textInput }
-              ref={ c => (this.headerInput = c) }
-              onChange={ this.onHeaderInputChange } />
+              onChange={ this.onNameInputChange } />
           </div>
 
           <div style={ styles.row } >
             <label htmlFor='tags' style={ styles.label }>
-              Tags for search and cataloging
+              Tags for cataloging
             </label>
             <div style={ styles.flexRow } >
               <button
                 type='button'
                 style={ styles.addTagsBtn }
-                onClick={ this.onAddTagClickHandle } >
+                onClick={ this.onAddTagClick } >
                 +
               </button>
               <input
                 name='tags'
                 value={ tags.join(', ') }
                 style={ styles.textInput } />
-              <div style={ styles.dropDownBox(dropDownBoxShow) } >
-                <DropDownList onSelect={ this.onSelectTagHandle } />
+              <div style={ styles.dropDownBox(showCatalogPopup) } >
+                <DropDownList onSelect={ this.onSelectTag } />
               </div>
             </div>
           </div>
 
           <div style={ styles.row } >
-            <label htmlFor='title' style={ styles.label }>
-              Description with tags for search
+            <label htmlFor='keywords' style={ styles.label }>
+              Keywords for search
             </label>
             <input
-              name='title'
-              value={ this.state.titleInputValue }
-              onChange={ this.onTitleInputChange }
+              name='keywords'
+              value={ keywords }
+              onChange={ this.onKeywordsInputChange }
               style={ styles.textInput } />
           </div>
 
           <div style={ styles.row } >
             <Style rules={ styles.quill } />
             <ReactQuill
-              onChange={ this.handleEditorChange }
+              onChange={ this.onChangeBody }
               theme='snow' />
           </div>
 
@@ -140,11 +146,12 @@ export default class NewTopic extends Component {
   getStyles() {
     return {
       root: {
-        width: '100vw',
+        width: '92vw',
+        margin: '4vw',
         fontFamily: 'PT Sans'
       },
       row: {
-        margin: '2rem'
+        margin: '2rem 0'
       },
       label: {
         display: 'block',
@@ -184,8 +191,16 @@ export default class NewTopic extends Component {
         border: 0,
         padding: 0
       },
-      sidebarList: {
-        margin: '2rem'
+      filesList: {
+        display: 'flex',
+        flexFlow: 'column wrap',
+        flexGrow: 1,
+        justifyContent: 'center'
+      },
+      dropFilesBox: {
+        flexGrow: 1,
+        display: 'flex',
+        alignItems: 'stretch'
       },
       dropDownBox: isShow => ({
         position: 'absolute',

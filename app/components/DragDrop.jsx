@@ -13,21 +13,14 @@ export default class DragDrop extends Component {
   render() {
     const styles = this.getStyles()
     return (
-      <div id='dropTarget' style={ styles.root } >
-        <div style={ styles.box } >
-          Drop files here
-        </div>
+      <div id='dropTarget' style={ styles.box } >
+        Drop files here
       </div>
     )
   }
 
   getStyles() {
     return {
-      root: {
-        width: '92vw',
-        height: '16vh',
-        margin: '1vh 4vw'
-      },
       box: {
         alignItems: 'center',
         background: '#fff',
@@ -36,10 +29,8 @@ export default class DragDrop extends Component {
         color: '#b2b1b2',
         display: 'flex',
         fontSize: '1.6rem',
-        height: '100%',
         justifyContent: 'center',
-        outline: '8px solid #fff',
-        width: '100%'
+        minHeight: '16vh'
       }
     }
   }

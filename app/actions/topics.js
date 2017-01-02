@@ -18,5 +18,8 @@ export const setTopic = (key, value) =>
 export const search = value =>
   action(actions.DO_SEARCH, { value })
 
-export const createTopic = (key, value) =>
-  action(actions.CREATE_TOPIC, { key, value })
+export const createTopic = props =>
+  action(actions.CREATE_TOPIC, { props })
+
+export const putTopic = (key, value) =>
+  action(actions.PUT_TOPIC, { key, value })
