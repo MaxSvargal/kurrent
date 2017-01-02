@@ -156,7 +156,9 @@ export default class NewTopic extends Component {
         fontSize: '1rem',
         lineHeight: '1rem',
         width: '100%',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        border: '1px solid #b2b1b2',
+        background: '#fff'
       },
       addTagsBtn: {
         width: '3rem',

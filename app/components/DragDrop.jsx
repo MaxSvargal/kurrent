@@ -29,16 +29,17 @@ export default class DragDrop extends Component {
         margin: '1vh 4vw'
       },
       box: {
-        width: '100%',
-        height: '100%',
-        boxSizing: 'border-box',
-        background: '#fff',
-        border: '4px dashed #333',
-        outline: '8px solid #fff',
-        display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
-        fontSize: '1.6rem'
+        background: '#fff',
+        border: '4px dashed #b2b1b2',
+        boxSizing: 'border-box',
+        color: '#b2b1b2',
+        display: 'flex',
+        fontSize: '1.6rem',
+        height: '100%',
+        justifyContent: 'center',
+        outline: '8px solid #fff',
+        width: '100%'
       }
     }
   }

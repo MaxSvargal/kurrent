@@ -35,7 +35,7 @@ class TopicsList extends Component {
       <div style={ styles.list }>
         { topics.map((topic, index) => (
           <RLink
-            to={ `topic/${topic.key}` }
+            to={ `topics/${topic.key}` }
             style={ styles.listItem }
             key={ index } >
             <div>

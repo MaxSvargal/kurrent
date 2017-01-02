@@ -13,8 +13,8 @@ class BackLink extends Component {
       <button
         style={ {
           background: '#fff',
-          border: '1px solid #f1f1f1',
-          color: '#ccc',
+          border: '1px solid #b2b1b2',
+          color: '#b2b1b2',
           fontFamily: 'PT Sans',
           fontSize: '1.2rem',
           margin: '1rem 2rem',
