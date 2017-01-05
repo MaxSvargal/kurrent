@@ -1,37 +1,33 @@
 import { fork, call, put, take } from 'redux-saga/effects'
-import { createTorrent, parseTorrent, createMagnet } from 'services/torrent'
+import { seedTorrent } from 'services/torrent'
 
-import { putTopic } from 'actions/topics'
+import { addTopic } from 'actions/topics'
+import { addTorrent } from 'actions/torrents'
 import { errorMessage } from 'actions/utils'
 import { CREATE_TOPIC } from 'actions/types'
 
-export function* getTorrentProps(inputFiles, name) {
-  const torrent = yield createTorrent(inputFiles, name)
-  const parsed = parseTorrent(torrent)
-  const { infoHash, files, length } = parsed
-  const magnet = createMagnet(infoHash, name)
-  const created = parsed.created.getTime()
-  const key = infoHash
-
-  return { key, magnet, length, files, created }
-}
+const filterFilesProps = files =>
+  files.map(({ length, name, offset }) => ({ length, name, offset }))
 
 export function* create() {
   while (true) {
     try {
       const { props } = yield take(CREATE_TOPIC)
-      const { body, keywords, name, tags, files } = props
+      const { body, keywords, name, tags, files: filesList } = props
 
-      const torrentProps = yield call(getTorrentProps, files, name)
-      const topic = { ...torrentProps, name, body, keywords, tags }
+      const torrent = yield call(seedTorrent, name, filesList)
+      const { length, magnetURI, infoHash: key, files: filesTorrent } = torrent
+      const files = filterFilesProps(filesTorrent)
 
-      yield put(putTopic(torrentProps.key, topic))
+      const topic = { body, keywords, name, tags, key, length, magnetURI, files }
+
+      yield put(addTopic(key, topic))
+      yield put(addTorrent(key, torrent))
     } catch (err) {
       yield put(errorMessage(err, CREATE_TOPIC))
     }
   }
 }
-
 
 export default function* torrents() {
   yield [

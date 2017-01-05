@@ -8,7 +8,7 @@ import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
 import { errorMessage } from 'actions/utils'
 import { setSearchIndex, setTopic, setSearchResult, setPeersNum } from 'actions/topics'
-import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, PUT_TOPIC } from 'actions/types'
+import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, ADD_TOPIC } from 'actions/types'
 
 const bootstrap = { address: 'ec2-52-23-204-215.compute-1.amazonaws.com', port: 1330 }
 const params = { address: '127.0.0.1', port: 1333 }
@@ -95,7 +95,7 @@ export function* search() {
 
 export function* putTopicWatcher() {
   while (true) {
-    const { key, value } = yield take(PUT_TOPIC)
+    const { key, value } = yield take(ADD_TOPIC)
     const compressed = yield call(compress, value)
     yield call(kad.put, key, compressed)
   }

@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux'
-import { SET_TOPIC, SET_SEARCH_RESULT, SET_SEARCH_INDEX, SET_PEERS_NUM } from 'actions/types'
+import { ADD_TOPIC, SET_SEARCH_RESULT, SET_SEARCH_INDEX, SET_PEERS_NUM } from 'actions/types'
 
 type reducerArgs = { type: string, payload: ?{} }
 
-export const entities = (state = {}, { type, payload }: reducerArgs) =>
-  type === SET_TOPIC ? { ...state, [payload.key]: payload.value } : state
+export const entities = (state = {}, { type, key, topic }) =>
+  type === ADD_TOPIC ? { ...state, [key]: topic } : state
 
-export const ids = (state = [], { type, payload }: reducerArgs) =>
-  type === SET_TOPIC ? [ ...new Set([ ...state, payload.key ]) ] : state
+export const ids = (state = [], { type, key }: reducerArgs) =>
+  type === ADD_TOPIC ? [ ...new Set([ ...state, key ]) ] : state
 
 export const finded = (state = [], { type, payload }: reducerArgs) =>
   type === SET_SEARCH_RESULT ? payload : state

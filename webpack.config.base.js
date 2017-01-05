@@ -7,14 +7,18 @@ import validate from 'webpack-validator'
 import { dependencies as externals } from './app/package.json'
 
 export default validate({
+  target: 'web',
+  node: {
+    fs: 'empty'
+  },
   module: {
     loaders: [ {
       test: /\.jsx?$/,
-      loaders: [ 'babel-loader' ],
+      loaders: [ 'babel' ],
       exclude: /node_modules/
     }, {
       test: /\.json$/,
-      loader: 'json-loader'
+      loader: 'json'
     } ]
   },
 

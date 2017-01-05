@@ -11,9 +11,6 @@ export const setSearchIndex = payload =>
 export const setSearchResult = payload =>
   action(actions.SET_SEARCH_RESULT, { payload })
 
-export const setTopic = (key, value) =>
-  action(actions.SET_TOPIC, { payload: { key, value } })
-
 /* for sagas */
 export const search = value =>
   action(actions.DO_SEARCH, { value })
@@ -21,5 +18,5 @@ export const search = value =>
 export const createTopic = props =>
   action(actions.CREATE_TOPIC, { props })
 
-export const putTopic = (key, value) =>
-  action(actions.PUT_TOPIC, { key, value })
+export const addTopic = (key, topic) =>
+  action(actions.ADD_TOPIC, { key, topic })
