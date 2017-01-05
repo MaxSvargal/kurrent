@@ -4,6 +4,8 @@ import { StunClient, transports } from 'stun-js'
 import ip from 'ip'
 import dgram from 'dgram'
 
+const stunServer = { address: 'stun1.l.google.com', port: 19302 }
+
 export default class KadUDPStunTransport extends kad.transports.UDP {
   _open(done) {
     return ip.isPublic(this._contact.address) ?
@@ -12,29 +14,26 @@ export default class KadUDPStunTransport extends kad.transports.UDP {
   }
 
   _send(data, contact) {
-    console.log('send to', contact, 'from', this._contact)
     super._send(data, contact)
   }
 
   createSocket(done) {
-    const { address, port } = { address: 'stun1.l.google.com', port: 19302 }
-    const socket = dgram.createSocket('udp4', { reuseAddr: false }, this.receive.bind(this))
+    const socket = dgram.createSocket('udp4', this.receive.bind(this))
 
     socket.on('listening', () => {
       const transport = new transports.UDP(socket)
-      const client = new StunClient(address, port, transport)
+      const client = new StunClient(stunServer.address, stunServer.port, transport)
 
       const sendBindRequest = () => {
-        client.bindP().then(mappedAddress => {
-          this._contact.address = mappedAddress.address
-          this._contact.port = mappedAddress.port
+        client.bindP().then(({ address, port }) => {
+          this._contact.address = address
+          this._contact.port = port
           this._socket = socket
-
-          const token = '12345'
-          socket.on('message', done)
-          return socket.send(token, 0, token.length, mappedAddress.port, mappedAddress.address)
+          client.closeP()
+          return done()
         })
-        .catch(err => console.error({ err }))
+        .catch(err =>
+          console.error({ err }))
       }
       sendBindRequest(client, socket)
     })

@@ -7,8 +7,7 @@ import KadUDPStunTransport from './kadUDPStunTransport'
 export default class Kad {
   constructor(props: { address: string, port: number }): {} {
     const contact = kad.contacts.AddressPortContact(props)
-    const stunProps = { address: 'stun1.l.google.com', port: 19302 }
-    const transport = new KadUDPStunTransport(contact, stunProps)
+    const transport = new KadUDPStunTransport(contact)
     const storage = new kad.storage.LocalStorage('kad')
 
     this.dht = new kad.Node({ transport, storage })
