@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
+import { primary } from 'styles/colors'
+
 export default class SearchInput extends Component {
   props: {
     indexSize: number
@@ -12,8 +14,8 @@ export default class SearchInput extends Component {
 
     return (
       <div style={ styles.root }>
-        <div style={ styles.stats }>{ indexSize } topics in index</div>
         <Link to='/topics/new' style={ styles.btn }>+ torrent</Link>
+        <div style={ styles.stats }>{ indexSize } topics in index</div>
       </div>
     )
   }
@@ -21,12 +23,17 @@ export default class SearchInput extends Component {
   getStyles() {
     return {
       root: {
-        height: '5vh',
-        background: '#6e5445',
+        background: primary,
         color: '#fff',
         display: 'flex',
         flexFlow: 'row nowrap',
-        justifyContent: 'space-between'
+        height: '2.3rem',
+        justifyContent: 'space-between',
+        left: 0,
+        position: 'fixed',
+        top: 0,
+        width: '100vw',
+        zIndex: 8
       },
       btn: {
         background: '#a0be11',
@@ -35,14 +42,16 @@ export default class SearchInput extends Component {
         fontSize: '.8rem',
         textAlign: 'center',
         padding: 0,
-        height: '3vh',
-        margin: '1vh',
+        height: '1.6rem',
+        margin: '.4rem 5.5rem',
         width: '5rem',
-        lineHeight: '3vh',
+        lineHeight: '1.6rem',
         textDecoration: 'none'
       },
       stats: {
-        margin: '.5rem'
+        margin: '0 1rem',
+        fontSize: '.8rem',
+        lineHeight: '2.3rem'
       }
     }
   }

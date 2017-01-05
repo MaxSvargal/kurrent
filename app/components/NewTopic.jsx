@@ -5,7 +5,7 @@ import ReactQuill from 'react-quill'
 
 import DropDownList from 'components/DropDownList'
 import DragDrop from 'components/DragDrop'
-import BackLink from 'components/BackLink'
+import TopBarBackLink from 'components/TopBarBackLink'
 import FilesList from 'components/FilesList'
 
 @withRouter
@@ -70,7 +70,7 @@ export default class NewTopic extends Component {
 
     return (
       <div style={ styles.root } >
-        <BackLink />
+        <TopBarBackLink />
         <form id='topicForm' >
 
           <div style={ styles.row } >
@@ -152,7 +152,7 @@ export default class NewTopic extends Component {
     return {
       root: {
         width: '92vw',
-        margin: '4vw',
+        margin: '6vw 4vw 2vw 4vw',
         fontFamily: 'PT Sans'
       },
       row: {

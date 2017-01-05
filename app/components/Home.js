@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 
+import bgImg from 'images/background.png'
+import { primary } from 'styles/colors'
+
 import FloatedSearchPanel from './FloatedSearchPanel'
-import TopicsList from './TopicsList'
-import TopBar from './TopBar'
 import TagsLinks from './TagsLinks'
+import TopBar from './TopBar'
+import TopicsList from './TopicsList'
 
 export default class Home extends Component {
   props: {
@@ -55,9 +58,9 @@ export default class Home extends Component {
   getStyles() {
     return {
       root: {
-        background: '#f2f1ef',
+        background: `${primary} url(${bgImg}) -17vw 6vh`,
+        minHeight: '95vh',
         color: '#685546',
-        minHeight: '100vh',
         fontFamily: 'PT Sans'
       }
     }

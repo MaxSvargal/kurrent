@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import radium from 'radium'
 
 import TopicsResultMessages from './TopicsResultMessages'
+import CometsAnim from './CometsAnim'
 
 const RLink = radium(Link)
 
@@ -34,28 +35,34 @@ class TopicsList extends Component {
         arr, [])
 
     return (
-      <div style={ styles.list }>
+      <div>
         <TopicsResultMessages finded={ ids.length } isset={ topics.length } />
-        { topics.map((topic, index) => (
-          <RLink
-            to={ `topics/${topic.key}` }
-            style={ styles.listItem }
-            key={ index } >
-            <div>
-              <img src={ topic.pic } style={ styles.pic } alt='loading...' />
-            </div>
-            <div>
-              <span style={ styles.title } >
-                { topic.title }
-              </span>
-              { topic.peersNum &&
-                <span style={ styles.peersNum }>
-                  Peers: <strong>{ topic.peersNum }</strong>
-                </span> }
-              <p>{ topic.desc }</p>
-            </div>
-          </RLink>
-        )) }
+        { topics.length === 0 && <CometsAnim /> }
+
+        { topics.length > 0 &&
+          <div style={ styles.list }>
+            { topics.map((topic, index) => (
+              <RLink
+                to={ `topics/${topic.key}` }
+                style={ styles.listItem }
+                key={ index } >
+                <div>
+                  <img src={ topic.pic } style={ styles.pic } alt='loading...' />
+                </div>
+                <div>
+                  <span style={ styles.title } >
+                    { topic.title }
+                  </span>
+                  { topic.peersNum &&
+                    <span style={ styles.peersNum }>
+                      Peers: <strong>{ topic.peersNum }</strong>
+                    </span> }
+                  <p>{ topic.desc }</p>
+                </div>
+              </RLink>
+            )) }
+          </div>
+        }
       </div>
     )
   }
@@ -64,7 +71,9 @@ class TopicsList extends Component {
     return {
       list: {
         display: 'flex',
-        flexFlow: 'column wrap'
+        flexFlow: 'column wrap',
+        background: '#fdfeff',
+        minHeight: '88vh'
       },
       listItem: {
         padding: '1rem',

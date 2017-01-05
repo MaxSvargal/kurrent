@@ -6,18 +6,53 @@ export default class TopicsResultMessages extends Component {
     isset: number
   }
 
+  messages = [
+    'Launch Status Check',
+    'Payload Test Conductor',
+    'Launch Processing System Test',
+    'Booster Systems Checking',
+    'Ready To Start',
+    'Waiting For Peers',
+    'Peers Receive Messages',
+    'Workers Processing',
+    'Prepare To Show'
+  ]
+
+  state = {
+    messageIndex: 0
+  }
+
+  componentWillReceiveProps({ finded, isset }) {
+    const getRandom = () => Math.floor(Math.random() * 3000) + 1000
+    const timerHandle = () => {
+      this.setState({ messageIndex: this.state.messageIndex + 1 })
+      this.state.messageIndex < this.messages.length &&
+        (this.timer = setTimeout(timerHandle, getRandom()))
+    }
+
+    finded > 0 && finded !== isset && timerHandle()
+  }
+
+  componentWillUnmount() {
+    this.timer && clearTimeout(this.timer)
+  }
+
   render() {
     const { finded, isset } = this.props
+    const { messageIndex } = this.state
     const styles = this.getStyles()
 
     return (
-      <div >
-        <div style={ styles.finded }>
-          Finded { finded } results
-        </div>
+      <div>
+        { finded > 0 && finded === isset &&
+          <div style={ styles.findedBar }>
+            Found { finded } results
+          </div>
+        }
         { finded !== isset &&
-          <div style={ styles.onProccess } >
-            Peers requests on progress. Please, wait...
+          <div style={ styles.onProccessBox } >
+            <div style={ styles.finded }>Found { finded } results</div>
+            <div style={ styles.msg }>{ this.messages[messageIndex] }</div>
           </div>
         }
       </div>
@@ -26,16 +61,23 @@ export default class TopicsResultMessages extends Component {
 
   getStyles() {
     return {
-      finded: {
-        margin: '1rem 8rem',
+      findedBar: {
+        padding: '.5rem 8rem',
         fontSize: '.9rem',
-        color: '#6e5445'
+        color: '#3a8c99',
+        background: '#1b4660'
       },
-      onProccess: {
+      onProccessBox: {
         textAlign: 'center',
-        color: '#e4a617',
-        fontSize: '1.8rem',
-        margin: '4rem 1rem'
+        color: '#fff',
+        fontSize: '2rem',
+        margin: '6rem 1rem'
+      },
+      finded: {
+        color: '#99ffee',
+        fontSize: '.7em'
+      },
+      msg: {
       }
     }
   }

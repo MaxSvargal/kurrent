@@ -44,7 +44,8 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
-    height: 728
+    height: 728,
+    titleBarStyle: 'hidden-inset'
   })
 
   mainWindow.loadURL(`file://${__dirname}/app.html`)
@@ -74,9 +75,9 @@ app.on('ready', async () => {
 
   if (process.platform === 'darwin') {
     template = [{
-      label: 'Electron',
+      label: 'Kurrent',
       submenu: [{
-        label: 'About ElectronReact',
+        label: 'About Kurrent',
         selector: 'orderFrontStandardAboutPanel:'
       }, {
         type: 'separator'
@@ -86,7 +87,7 @@ app.on('ready', async () => {
       }, {
         type: 'separator'
       }, {
-        label: 'Hide ElectronReact',
+        label: 'Hide Kurrent',
         accelerator: 'Command+H',
         selector: 'hide:'
       }, {

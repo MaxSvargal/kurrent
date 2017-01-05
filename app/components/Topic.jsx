@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 
-import BackLink from 'components/BackLink'
+import TopBarBackLink from 'components/TopBarBackLink'
 
 export default class Topic extends Component {
   props: {
@@ -24,6 +24,7 @@ export default class Topic extends Component {
 
     return (
       <div style={ styles.root } >
+        <TopBarBackLink />
         <div style={ styles.container } >
           <h1>{ title }</h1>
           <div>{ desc }</div>

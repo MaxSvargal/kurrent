@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { StyleRoot, Style } from 'radium'
 
 import normalize from '../styles/normalize'
-import { secondary, textMuted } from '../styles/colors'
+import { secondary, textMuted, backgroundMuted } from '../styles/colors'
 
 export default class App extends Component {
   props: {
@@ -22,6 +22,7 @@ export default class App extends Component {
   styles = {
     body: {
       fontSize: '100%',
+      minHeight: '88vh',
       margin: 0,
       WebkitTapHighlightColor: 'transparent'
     },
@@ -36,7 +37,8 @@ export default class App extends Component {
     },
     input: {
       WebkitAppearance: 'none',
-      appearance: 'none'
+      appearance: 'none',
+      background: backgroundMuted
     },
     'input:valid': {
       outline: 'none'
