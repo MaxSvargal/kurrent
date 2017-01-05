@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import radium from 'radium'
 
+import TopicsResultMessages from './TopicsResultMessages'
+
 const RLink = radium(Link)
 
 class TopicsList extends Component {
@@ -33,6 +35,7 @@ class TopicsList extends Component {
 
     return (
       <div style={ styles.list }>
+        <TopicsResultMessages finded={ ids.length } isset={ topics.length } />
         { topics.map((topic, index) => (
           <RLink
             to={ `topics/${topic.key}` }
