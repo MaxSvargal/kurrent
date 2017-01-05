@@ -6,4 +6,7 @@ type reducerArgs = { type: string, payload: ?{} }
 export const entities = (state = {}, { type, payload }: reducerArgs) =>
   type === ADD_TORRENT ? { ...state, [payload.key]: payload.torrent } : state
 
-export default combineReducers({ entities })
+export const ids = (state = [], { type, payload }: reducerArgs) =>
+  type === ADD_TORRENT ? [ ...new Set([ ...state, payload.key ]) ] : state
+
+export default combineReducers({ entities, ids })

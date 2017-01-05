@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 import { Style } from 'radium'
 import ReactQuill from 'react-quill'
 
@@ -7,8 +8,12 @@ import DragDrop from 'components/DragDrop'
 import BackLink from 'components/BackLink'
 import FilesList from 'components/FilesList'
 
+@withRouter
 export default class NewTopic extends Component {
   props: {
+    router: {
+      push: () => void
+    },
     createTopic: () => void
   }
 
@@ -23,7 +28,10 @@ export default class NewTopic extends Component {
 
   onSubmitHandle = event => {
     const { body, files, keywords, name, tags } = this.state
-    this.props.createTopic({ body, files, keywords, name, tags })
+    const { createTopic, router } = this.props
+
+    createTopic({ body, files, keywords, name, tags })
+    router.push(`/await_topic/${name}`)
     event.preventDefault()
   }
 
