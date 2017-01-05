@@ -5,6 +5,7 @@ import ReactQuill from 'react-quill'
 import DropDownList from 'components/DropDownList'
 import DragDrop from 'components/DragDrop'
 import BackLink from 'components/BackLink'
+import FilesList from 'components/FilesList'
 
 export default class NewTopic extends Component {
   props: {
@@ -52,7 +53,7 @@ export default class NewTopic extends Component {
     const tagsArr = [ ...this.state.tags, toTag(section), toTag(subsection) ]
     const tags = [ ...new Set(tagsArr) ]
     const keywords = this.getKeywords(this.state.name, tags)
-    this.setState({ tags, keywords })
+    this.setState({ tags, keywords, showCatalogPopup: false })
   }
 
   render() {
@@ -68,13 +69,9 @@ export default class NewTopic extends Component {
             <div style={ styles.flexRow } >
               { files.length > 0 &&
                 <div style={ styles.filesList } >
-                  { files.map((file, index) => (
-                    <div key={ index } >
-                      <span>{ file.name } { ' ' }</span>
-                      <small>{ file.size } bytes</small>
-                    </div>
-                  )) }
-                </div> }
+                  <FilesList files={ files } />
+                </div>
+              }
               <div style={ styles.dropFilesBox } >
                 <DragDrop onDrop={ this.onDropFiles } />
               </div>
@@ -168,12 +165,14 @@ export default class NewTopic extends Component {
         background: '#fff'
       },
       addTagsBtn: {
-        width: '3rem',
-        height: '3rem',
+        background: '#a0be11',
         border: '1px solid #a0be11',
         color: '#fff',
-        background: '#a0be11',
-        fontSize: '1.5rem'
+        fontSize: '2rem',
+        height: '3rem',
+        lineHeight: '3rem',
+        padding: 0,
+        width: '3.25rem'
       },
       flexRow: {
         display: 'flex',
@@ -207,7 +206,7 @@ export default class NewTopic extends Component {
         display: isShow ? 'block' : 'none',
         background: '#fff',
         border: '1px solid #ccc',
-        width: '70vw',
+        width: '90vw',
         margin: '.5rem',
         zIndex: 999
       }),

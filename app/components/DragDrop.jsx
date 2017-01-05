@@ -30,7 +30,8 @@ export default class DragDrop extends Component {
         display: 'flex',
         fontSize: '1.6rem',
         justifyContent: 'center',
-        minHeight: '16vh'
+        minHeight: '16vh',
+        width: '100%'
       }
     }
   }

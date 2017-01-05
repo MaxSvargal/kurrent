@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { StyleRoot, Style } from 'radium'
 
 import normalize from '../styles/normalize'
-import { secondary, text, textMuted } from '../styles/colors'
+import { secondary, textMuted } from '../styles/colors'
 
 export default class App extends Component {
   props: {
@@ -34,27 +34,15 @@ export default class App extends Component {
     '::placeholder': {
       color: textMuted
     },
-    '.darkenPlaceholder::-webkit-input-placeholder': {
-      color: text
-    },
-    '.darkenPlaceholder::-moz-placeholder': {
-      color: text
-    },
-    '.darkenPlaceholder::placeholder': {
-      color: text
-    },
     input: {
       WebkitAppearance: 'none',
       appearance: 'none'
     },
     'input:valid': {
-      outline: 'none',
-      boxShadow: '0 0 1px rgb(130, 183, 33)'
+      outline: 'none'
     },
     'input:invalid': {
-      outline: 'none',
-      boxShadow: '0 0 1px rgb(253, 61, 58)',
-      background: 'rgb(254, 238, 238)'
+      outline: 'none'
     },
     a: {
       color: secondary
