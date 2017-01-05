@@ -9,8 +9,9 @@ export default class Kad {
     const contact = kad.contacts.AddressPortContact(props)
     const transport = new KadUDPStunTransport(contact)
     const storage = new kad.storage.LocalStorage('kad')
+    const logger = new kad.Logger(0)
 
-    this.dht = new kad.Node({ transport, storage })
+    this.dht = new kad.Node({ transport, storage, logger })
     this.events = new EventEmitter()
     this.transport = transport
 
