@@ -10,7 +10,8 @@ import { errorMessage } from 'actions/utils'
 import { setSearchIndex, setTopic, setSearchResult, setPeersNum } from 'actions/topics'
 import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, ADD_TOPIC } from 'actions/types'
 
-const bootstrap = { address: 'ec2-52-23-204-215.compute-1.amazonaws.com', port: 1330 }
+import bootstrapList from 'bootstrap.json'
+
 const params = { address: '127.0.0.1', port: 1333 }
 const kad = new Kad(params)
 const dht = new TorrentDHT()
@@ -64,7 +65,10 @@ export function* getTopic(key) {
 
 export function* initial() {
   try {
-    yield call(kad.connect, bootstrap)
+    for (const peer of bootstrapList) {
+      const [ address, port ] = peer.split(':')
+      yield fork(kad.connect, { address, port: Number(port) })
+    }
     yield fork(getSearchIndex)
     yield fork(listenStoreChannel)
   } catch (err) {
