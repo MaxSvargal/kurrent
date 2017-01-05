@@ -7,7 +7,7 @@ import { compress, decompress } from 'services/zlib'
 import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
 import { errorMessage } from 'actions/utils'
-import { setSearchIndex, setTopic, setSearchResult, setPeersNum } from 'actions/topics'
+import { addTopic, setSearchIndex, setSearchResult, setPeersNum } from 'actions/topics'
 import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, ADD_TOPIC } from 'actions/types'
 
 import bootstrapList from 'bootstrap.json'
@@ -23,7 +23,7 @@ export function* listenStoreChannel() {
     while (true) {
       const { message: { params: { item } } } = yield take(channel)
       const value = yield call(decompress, item.value)
-      yield put(setTopic(item.key, value))
+      yield put(addTopic(item.key, value))
     }
   } catch (err) {
     yield put(errorMessage(err, 'kadReceiveStoreChannel'))
@@ -56,7 +56,7 @@ export function* getTopic(key) {
   try {
     const compressed = yield call(kad.get, key)
     const topic = yield call(decompress, compressed)
-    yield put(setTopic(key, topic))
+    yield put(addTopic(key, topic))
     yield call(requestPeersNum, key, topic.magnet)
   } catch (err) {
     yield put(errorMessage(err, SET_TOPIC))
@@ -99,8 +99,8 @@ export function* search() {
 
 export function* putTopicWatcher() {
   while (true) {
-    const { key, value } = yield take(ADD_TOPIC)
-    const compressed = yield call(compress, value)
+    const { key, topic } = yield take(ADD_TOPIC)
+    const compressed = yield call(compress, topic)
     yield call(kad.put, key, compressed)
   }
 }
