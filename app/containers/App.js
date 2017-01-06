@@ -20,10 +20,11 @@ export default class App extends Component {
   }
 
   styles = {
-    body: {
+    'html, body': {
+      fontFamily: 'PT Sans',
       fontSize: '100%',
-      minHeight: '88vh',
       margin: 0,
+      minHeight: '88vh',
       WebkitTapHighlightColor: 'transparent'
     },
     '::-webkit-input-placeholder': {

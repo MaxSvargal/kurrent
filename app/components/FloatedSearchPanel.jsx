@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import radium, { Style } from 'radium'
-import { primary } from 'styles/colors'
+import colors from 'styles/colors'
 
 import logo from 'images/logo.svg'
 
@@ -55,7 +55,7 @@ class FloatedSearchPanel extends Component {
         padding: '1rem',
         fontSize: '1.4rem',
         margin: '1rem',
-        border: `2px solid ${primary}`,
+        border: `2px solid ${colors.primary}`,
         outline: 'none',
         width: isResultsIsset ? '60vw' : '100%',
         boxSizing: 'border-box'

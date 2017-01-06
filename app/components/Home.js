@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
+import colors from 'styles/colors'
 import bgImg from 'images/background.png'
-import { primary } from 'styles/colors'
 
 import FloatedSearchPanel from './FloatedSearchPanel'
 import TagsLinks from './TagsLinks'
@@ -58,10 +58,9 @@ export default class Home extends Component {
   getStyles() {
     return {
       root: {
-        background: `${primary} url(${bgImg}) -17vw 6vh`,
+        background: `${colors.primary} url(${bgImg}) -17vw 6vh`,
         minHeight: '95vh',
-        color: '#685546',
-        fontFamily: 'PT Sans'
+        color: '#685546'
       }
     }
   }
