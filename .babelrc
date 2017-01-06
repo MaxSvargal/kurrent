@@ -1,10 +1,13 @@
 {
-	"presets": [
-    "es2015",
-    "stage-0",
-    "react"
+  "presets": [ "react" ],
+  "plugins": [
+    "add-module-exports",
+    "transform-export-extensions",
+    "transform-decorators-legacy",
+    "transform-es2015-modules-commonjs",
+    "transform-async-to-generator",
+    "transform-object-rest-spread"
   ],
-  "plugins": ["transform-decorators-legacy", "add-module-exports"],
   "env": {
     "production": {
       "presets": ["react-optimize"],
