@@ -1,5 +1,4 @@
-import { fork, call, put, take, select } from 'redux-saga/effects'
-import { throttle } from 'redux-saga'
+import { fork, call, put, take, select, throttle } from 'redux-saga/effects'
 
 import Kad from 'services/kad'
 import TorrentDHT from 'services/dht'

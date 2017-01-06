@@ -4,14 +4,17 @@
 
 import path from 'path'
 import validate from 'webpack-validator'
-import { dependencies as externals } from './app/package.json'
 
 export default validate({
   target: 'web',
   node: {
-    fs: 'empty'
+    console: 'empty',
+    fs: 'empty',
+    dgram: 'empty',
+    winston: 'empty'
   },
   module: {
+    noParse: [ 'ws' ],
     loaders: [ {
       test: /\.jsx?$/,
       loaders: [ 'babel' ],
@@ -41,5 +44,5 @@ export default validate({
 
   plugins: [],
 
-  externals: Object.keys(externals || {})
+  externals: [ 'fs', 'ws', 'dgram', 'winston' ]
 })
