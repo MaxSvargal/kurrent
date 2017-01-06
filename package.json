@@ -1,8 +1,8 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
-  "version": "0.10.0",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "name": "kurrent-builder",
+  "productName": "KurrentBuilder",
+  "version": "0.1.0",
+  "description": "p2p torrent tracker",
   "main": "main.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 mocha --retries 2 --compilers js:babel-register --recursive --require ./test/setup.js test/**/*.spec.js",
@@ -25,9 +25,9 @@
     "package-all": "npm run build && build -mwl"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.develar.ElectronReact",
-    "category": "public.app-category.tools",
+    "productName": "Kurrent",
+    "appId": "com.electron.kurrent",
+    "category": "public.app-category.network",
     "dmg": {
       "contents": [
         {
@@ -70,16 +70,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chentsulin/electron-react-boilerplate.git"
+    "url": "git+https://github.com/MaxSvargal/kurrent.git"
   },
   "author": {
-    "name": "C. T. Lin",
-    "email": "chentsulin@gmail.com",
-    "url": "https://github.com/chentsulin"
+    "name": "MaxSvargal",
+    "email": "maxsvargal@gmail.com",
+    "url": "https://github.com/MaxSvargal"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chentsulin/electron-react-boilerplate/issues"
+    "url": "https://github.com/MaxSvargal/kurrent/issues"
   },
   "keywords": [
     "electron",
@@ -90,7 +90,7 @@
     "webpack",
     "react-hot"
   ],
-  "homepage": "https://github.com/chentsulin/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/MaxSvargal/kurrent#readme",
   "devDependencies": {
     "asar": "^0.12.3",
     "babel-core": "^6.20.0",
