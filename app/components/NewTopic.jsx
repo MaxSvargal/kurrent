@@ -5,6 +5,7 @@ import ReactQuill from 'react-quill'
 
 import DropDownList from 'components/DropDownList'
 import DragDrop from 'components/DragDrop'
+import TopBar from 'components/TopBar'
 import TopBarBackLink from 'components/TopBarBackLink'
 import FilesList from 'components/FilesList'
 
@@ -70,7 +71,9 @@ export default class NewTopic extends Component {
 
     return (
       <div style={ styles.root } >
-        <TopBarBackLink />
+        <TopBar>
+          <TopBarBackLink />
+        </TopBar>
         <form id='topicForm' >
 
           <div style={ styles.row } >

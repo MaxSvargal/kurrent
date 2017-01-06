@@ -72,7 +72,7 @@ class TopicsList extends Component {
       list: {
         display: 'flex',
         flexFlow: 'column wrap',
-        background: '#fdfeff',
+        background: '#f9f8f8',
         minHeight: '88vh'
       },
       listItem: {

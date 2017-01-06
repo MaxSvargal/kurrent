@@ -6,6 +6,7 @@ import bgImg from 'images/background.png'
 import FloatedSearchPanel from './FloatedSearchPanel'
 import TagsLinks from './TagsLinks'
 import TopBar from './TopBar'
+import TopBarHome from './TopBarHome'
 import TopicsList from './TopicsList'
 
 export default class Home extends Component {
@@ -23,8 +24,7 @@ export default class Home extends Component {
     ids: string[],
     finded: string[],
     peersNum: {},
-    search: () => void,
-    createTopic: () => void
+    search: () => void
   }
 
   render() {
@@ -36,9 +36,9 @@ export default class Home extends Component {
 
     return (
       <div style={ styles.root }>
-        <TopBar
-          indexSize={ ids.length }
-          onCreateTopic={ this.props.createTopic } />
+        <TopBar>
+          <TopBarHome indexSize={ ids.length } />
+        </TopBar>
 
         <FloatedSearchPanel
           onChange={ this.props.search }
