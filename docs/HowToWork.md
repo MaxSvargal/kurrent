@@ -180,15 +180,15 @@ export function* getItemsSaga() {
   // after what
   // wait in loop for every GET_ITEMS actions
   while (true) {
+    yield take(GET_ITEMS)
     const response = yield call(getItemsFetch)
     // after call you can do anything else
     // i.e. get sub items required for items
-    yield call(requestSubItemsOf(response))
+    yield call(requestSubItems(response))
   }
 }
 
 export function* getItemsFetch() {
-  yield take(GET_ITEMS)
   const { response } = yield call(fetch, itemsRequest)
   if (response) yield put(setItems(response.items))
   return response
