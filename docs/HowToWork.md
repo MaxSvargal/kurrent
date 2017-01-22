@@ -1,5 +1,5 @@
 # How To Work
-Let create new entity for our application step-by-step.
+Let's create a new entity for our application step-by-step.
 
 1. [Action Types Constants](#action-types-constants)
 2. [Action Creators](#action-creators)
@@ -16,7 +16,7 @@ Let create new entity for our application step-by-step.
     * [Items Page Component](#items-page-component)
 
 ## Action Types Constants
-Let's add some constants to the file `actions/types.js`. This file contain all constant types of actions as simple strings. This allow to avoid a misprints and make work with actions more convenient.
+First, let's add some constants to the file `actions/types.js`. This file contains all constant types of actions as simple strings. It allows to avoid a misspells and makes work with actions more convenient.
 ``` javascript
 ...
 export const GET_ITEMS = 'GET_ITEMS'
@@ -28,11 +28,11 @@ export const SET_ITEMS = 'SET_ITEMS'
 ```
 
 ## Action Creators
-Action creators are functions that returns a static objects with our data as [standard redux actions] for passing to [`reducers`](#reducers). Pass the only one object argument for simplify destructuring assignments.
+Action creators are functions that return a static objects with our data as [standard redux actions] for further passing to [`reducers`](#reducers). Pass the only one object argument to simplify destructuring assignments.
 
-Call them on user input events from react components wrapped inside the store's `dispatch()` method. In other situations, call them from saga's `put()` helper.
+Call them on user input events from react components wrapped inside the store's `dispatch()` method. In other situations call them from saga's `put()` helper.
 
-Let's create a file `items.js` in the `actions` directory.
+Now let's create a file `items.js` in the `actions` directory.
 
 ``` javascript
 import { action } from 'actions/utils'
@@ -45,9 +45,9 @@ export const setItems = items => action(SET_ITEMS, { items })
 
 
 ## Reducers
-Reducer declare how to store our data.
+Reducer declares how our data are stored.
 
-We store our collection as key-value object where key is an id, value is an object of `entity` model. Just one more thing to store separately their `id` in array. This will make our structure and filtering process easier, make our collections immutable without any libraries.
+We store our collection as "key-value" object where key is an id and value is an object of `entity` model. One more thing to store separately is their `id` in array. It makes the structure and filtering process easier, and makes our collections immutable without any libraries.
 
 Let's create a file `items.js` in the `reducers` directory.
 
@@ -105,9 +105,9 @@ export const ids = (state = [], action: idsActionTypes) => {
 export default combineReducers({ entities, ids })
 ```
 
-We can add another reducers like `filtered` or `activated` arrays on which we will iterate.
+We can add more reducers like `filtered` or `activated` arrays on which we will iterate.
 
-Combine our reducers to root reducer. For this, open file `reducers/index.js`, import our combined reducer and add it to the list.
+Combine this reducers to root reducer. To do it, open file `reducers/index.js`, import our combined reducer and add it to the list.
 
 ``` javascript
 import { combineReducers } from 'redux'
@@ -203,7 +203,7 @@ export default function* itemsSagas() {
 ```
 
 ### Selectors
-The `sagas/selectors.js` contains a pure functions for select data from the store. The first argument is the current state and others are parameters passed by sagas.
+The `sagas/selectors.js` contains a pure functions for data selection from the store. The first argument is the current state and the others are parameters passed by sagas.
 
 ``` javascript
 // simple get auth token
@@ -225,8 +225,8 @@ export const searchItems = ({ entities: { items } }, request) => {
 
 ### Requests
 We can make abstraction over unified API requests.
-Make a sagas which do requests to server and handle their states. This sagas calls actions by self and notify the store with actions types like  `REQUEST_ITEM_REQUEST`, `REQUEST_ITEM_SUCCESS` and `REQUEST_ITEM_FAILURE`.
-You don't need to call a `put()` effect for store values after this sagas if you write a single reducer for handle this actions types.
+Make a sagas which do requests to server and handle their states. This sagas calls actions by themselves and notifies the store with actions types like  `REQUEST_ITEM_REQUEST`, `REQUEST_ITEM_SUCCESS` and `REQUEST_ITEM_FAILURE`.
+You don't need to call a `put()` effect to store values after this sagas if you write a single reducer for handle this actions types.
 
 You can invent other sagas as hight-level interfaces like this examples:
 
@@ -245,10 +245,10 @@ export const itemsRequest = bind(handlers(types(actions.REQUEST_ITEMS)), api.fet
 ```
 
 ## Services
-Services are an interfaces to libraries which has a side effects. It will be used by sagas. You must return a promise or a final value from service.
+Services are the interfaces to libraries who has a side effects. It will be used by sagas. You must return a promise or a final value from service.
 
 ### Fetch Service
-Here is an example of service over ES6 method `fetch()`
+Here is an example of a service over ES6 method `fetch()`
 
 ``` typescript
 // @flowtype
@@ -278,10 +278,10 @@ export const fetch = (endpoint: endpointType, params: paramsType): outputType =>
     })
     .then(responseHandle, errorHandle)
 ```
-Read documentations of [normalizr](https://github.com/paularmstrong/normalizr)
+See documentation of [normalizr](https://github.com/paularmstrong/normalizr)
 
 ### API Service
-Here is the configurable interfaces for all types of API requests, for example:
+Here are the configurable interfaces for all types of API requests, for example:
 
 ``` javascript
 import { fetch, authHeader } from 'services/fetch'
@@ -299,10 +299,10 @@ export const requestItemPut = ({ item, id, authToken }) =>
 
 
 ## React Components
-And now, lets render our data. Read [react]() documentation.
+And, finally, let's render our data. See [react]() documentation.
 
 ### Containers
-Connect our pages to redux store.
+Connects our pages to redux store.
 ``` javascript
 import { connect } from 'react-redux'
 import { getItems, setItem } from 'actions/items'
@@ -314,17 +314,17 @@ const mapDispatchToProps = { getItems, setItem }
 export default connect(mapToProps, mapDispatchToProps)(ItemsPage)
 
 ```
-Read documentation of [react-redux]( https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options).
+See the documentation of [react-redux]( https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options).
 
 ### Pages
 These modules are the root components as pages.
 
 #### Items Page Component
 Just call an action in `componentWillMount`, `componentDidMount` or in event handlers to communicate.
-`getItems` and `setItem` actions are already bind to store with react-redux `connect()`.
+`getItems` and `setItem` actions are already bound to store with react-redux `connect()` method.
 
-Step `yield take()` inside `getItemSaga` generator will see event type and go to the next step.
-React call render() method automatically after items in store will be changed.
+Step `yield take()` inside `getItemSaga` generator will check the event type and go to the next step.
+React calls render() method automatically after items in store are changed.
 
 ``` javascript
 import React, { Component } from 'react'
