@@ -16,7 +16,7 @@ Let's create a new entity for our application step-by-step.
     * [Items Page Component](#items-page-component)
 
 ## Action Types Constants
-Let's add some constants to the file `actions/types.js`. This file contains all constant types of actions as simple strings. It allows to avoid a misspells and makes work with actions more convenient.
+First, let's add some constants to the file `actions/types.js`. This file contains all constant types of actions as simple strings. It allows to avoid a misspells and makes work with actions more convenient.
 ``` javascript
 ...
 export const GET_ITEMS = 'GET_ITEMS'
@@ -32,7 +32,7 @@ Action creators are functions that return a static objects with our data as [sta
 
 Call them on user input events from react components wrapped inside the store's `dispatch()` method. In other situations call them from saga's `put()` helper.
 
-Let's create a file `items.js` in the `actions` directory.
+Now let's create a file `items.js` in the `actions` directory.
 
 ``` javascript
 import { action } from 'actions/utils'
