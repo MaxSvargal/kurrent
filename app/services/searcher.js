@@ -12,6 +12,9 @@ const simplifyFound = entities =>
 const makeWeights = entities =>
   entities.map(e => [ e[0], e[1].reduce(((out, v, i) => out + (v / (i + 1))), 0) ])
 
+const arrayWeightsToObject = entities =>
+  entities.reduce(((obj, arr) => ({ ...obj, [arr[0]]: arr[1] })), {})
+
 
 export default function search(data: { [key: string]: {} }, request: string) {
   const requestWords = splitByWhitespace(request)
@@ -19,6 +22,7 @@ export default function search(data: { [key: string]: {} }, request: string) {
   const entities = searchInData(dataWords, requestWords)
   const simplyEntries = simplifyFound(entities)
   const weights = makeWeights(simplyEntries)
+  const output = arrayWeightsToObject(weights)
 
-  return weights
+  return output
 }

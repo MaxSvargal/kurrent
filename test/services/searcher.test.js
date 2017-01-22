@@ -14,5 +14,5 @@ const searchIndex = {
 test('search service', t => {
   t.deepEqual(
     search(searchIndex, 'title marker'),
-    [ [ 0, 0 ], [ 1, 1 ], [ 2, 1 ], [ 3, 1 ], [ 4, 1.3333333333333333 ], [ 5, 1.5 ] ])
+    { 0: 0, 1: 1, 2: 1, 3: 1, 4: 1.3333333333333333, 5: 1.5 })
 })
