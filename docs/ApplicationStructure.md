@@ -29,10 +29,10 @@
 
 
 ## Actions
-[Redux action creators](http://redux.js.org/docs/basics/Actions.html#action-creators) separated by entities types.
+[Redux action creators](http://redux.js.org/docs/basics/Actions.html#action-creators) separated by entities type.
 
 ### `types.js`
-Contains all actions types constants as simple strings. Requires [`utils.js`](#utilsjs)
+Contains all action types constants as a simple strings. Requires [`utils.js`](#utilsjs)
 
 ### `utils.js`
 Utilities and helpers for action creators.
@@ -63,36 +63,36 @@ React components separated by type `pages` specified in [`routes`](#routes).
 
 
 ## Reducers
-Modules exports [reducers](http://redux.js.org/docs/basics/Reducers.html) functions for redux. Combined together in `index.js`
+Modules that exports [reducers](http://redux.js.org/docs/basics/Reducers.html) functions for redux. Are combined in `index.js`
 
 
 ## Sagas
 This modules implements all application business logic through [generators functions](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/function*) and using [redux-saga](https://github.com/redux-saga/redux-saga) helpers. Sagas watch the actions pulled to redux store then execute and catch side effects. The way it works is very much similar to [CSP (Communicating Sequential Processes)](https://en.wikipedia.org/wiki/Communicating_sequential_processes).
 
-All sagas combined through `index.js`
+All sagas are combined in `index.js`
 
 ### `api.js`
 Contains sagas and helpers for making API requests.
 
 #### `createRequestTypes(baseType)`
-Create a simple key-value object with keys `REQUEST`, `SUCCESS` and `FAILURE`. Where values is strings based on keys and `baseType` i.e. `ITEMS_SUCCESS`.
+Creates a simple "key-value" object with keys `REQUEST`, `SUCCESS` and `FAILURE`, where values are the strings based on keys and `baseType` i.e. `ITEMS_SUCCESS`.
 
 #### `createRequestHandlers(actions)`
 Returns object with request, success and failure actions creators.
 
 #### `bindFetchEntity({ request, success, failure }, apiFn)`
-Return function generator which call the passed functions depending on the request state.
+Returns function generator which calls the passed functions depending on the request state.
 
 ### `fetch(callerFn, params)`
-Call `callerFn` with `params`. Control authorization errors and push `API_REQUEST` errors to store.
+Calls `callerFn` with `params`. Controls authorization errors and pushes `API_REQUEST` errors to the store.
 
 ### `requests.js`
-Not has a sagas. Contains binds of request handlers (request, success and failure actions) to api calls functions listed on `services/api.js`
+Doesn't have any sagas. Contains bindings of request handlers (request, success and failure actions) to api calls functions listed in `services/api.js`
 Requires helpers of `sagas/api.js`
 
 
 ## Services
-Modules which exports libraries interfaces with side-effects. Using by sagas.
+Modules which exports libraries interfaces with side-effects. Supposed to be used by sagas.
 
 ### `schemas.js`
 Contains [normalizr](https://github.com/paularmstrong/normalizr) schemas and relations of models and collections received by API. Apply within the method `fetchJson()` of `services/fetch.js`
@@ -101,39 +101,39 @@ Contains [normalizr](https://github.com/paularmstrong/normalizr) schemas and rel
 ## Store
 
 ### `configureStore.js`
-Exports configured [redux store](http://redux.js.org/docs/api/Store.html) instance for development or production environment. Requires combined [`reducers`](#reducers) and [`sagas`](#sagas).
+Exports configured [redux store](http://redux.js.org/docs/api/Store.html) instance for development or production environment. Requires [`reducers`](#reducers) and [`sagas`](#sagas) combined.
 
 
 ## Styles
 Contains helpers for inline styles. Works independently of [radium](https://github.com/FormidableLabs/radium).
 
 ### `categoriesIcons.js`
-Associated object of categories labels with slugs. Slugs linked with icons files names `images/icons/categories/[slug].svg`
+Associated object of category labels with slugs. Slugs are linked with icons file names `images/icons/categories/[slug].svg`
 
 ### `colors.js`
-Contains all theme colors constants.
+Contains all colors constants of a theme.
 
 ### `flex.js`
-Utilities for [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout). All layouts based on Flexible Box Model. Don't use floats!
+Utilities for [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout). All layouts are based on Flexible Box Model. Don't use floats here!
 
 ### `normalize.js`
-Contains [normalize.css](https://github.com/necolas/normalize.css) rules converted to js object. Injected in `components/app.jsx`
+Contains [normalize.css](https://github.com/necolas/normalize.css) rules converted to js object. It is injected into `components/app.jsx`
 
 
 ## Utils
 
 ### `connectedRouter.js`
-Bindings to keep `react-router` and `redux` in sync. Also added the ability to use the history methods from sagas and components.
+Bindings to keep `react-router` and `redux` in sync. Also adds the ability to use the history methods from sagas and components.
 
 ### `radium.js`
-Isomorphic tools for using [radium](https://github.com/FormidableLabs/radium) on server-side.
+Isomorphic tools for [radium](https://github.com/FormidableLabs/radium) usage on server-side.
 
 ### `svgResolver.js`
-Isomorphic helper for using inline SVG on server and browser.
+Isomorphic helper for using inline SVG on both server and browser.
 
 
 ## `routes.js`
 Contains simple object-based config for `react-router@4`. Requires [`pages`](#pages).
 
 ## `main.jsx`
-Root browser-side react component which configure redux store, run sagas and connect router.
+Root browser-side react component which configures redux store, runs sagas and connects router.
