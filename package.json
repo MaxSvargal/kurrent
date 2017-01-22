@@ -5,7 +5,8 @@
   "description": "p2p torrent tracker",
   "main": "main.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 mocha --retries 2 --compilers js:babel-register --recursive --require ./test/setup.js test/**/*.spec.js",
+    "test": "NODE_ENV=test NODE_PATH=app nyc ava",
+    "coverage": "nyc report --reporter=lcov --reporter=text-lcov | coveralls",
     "test-watch": "npm test -- --watch",
     "test-e2e": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 mocha --retries 2 --compilers js:babel-register --require ./test/setup.js ./test/e2e.js",
     "lint": "eslint --ignore-path .gitignore --format=node_modules/eslint-formatter-pretty app test *.js",
@@ -188,5 +189,28 @@
   "devEngines": {
     "node": ">=6.x",
     "npm": ">=3.x"
+  },
+  "ava": {
+    "babel": "inherit",
+    "require": [
+      "babel-register",
+      "babel-polyfill"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "node_modules",
+      "**/*.test.js",
+      "server/**/*",
+      "app/data/*",
+      "app/utils/*",
+      "webpack.config.test.js"
+    ],
+    "extension": [
+      ".jsx"
+    ],
+    "cache": true,
+    "sourceMap": false,
+    "instrument": false
   }
 }
