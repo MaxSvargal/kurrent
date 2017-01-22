@@ -46,8 +46,8 @@ export function* getSearchIndex() {
   }
 }
 
-export function* requestPeersNum(key, magnet) {
-  const peersNum = yield call(dht.lookupPeers, magnet)
+export function* requestPeersNum(key, magnetURI) {
+  const peersNum = yield call(dht.lookupPeers, magnetURI)
   yield put(setPeersNum(key, peersNum))
 }
 
@@ -56,7 +56,7 @@ export function* getTopic(key) {
     const compressed = yield call(kad.get, key)
     const topic = yield call(decompress, compressed)
     yield put(addTopic(key, topic))
-    yield call(requestPeersNum, key, topic.magnet)
+    yield call(requestPeersNum, key, topic.magnetURI)
   } catch (err) {
     yield put(errorMessage(err, SET_TOPIC))
   }

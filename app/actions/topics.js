@@ -15,5 +15,8 @@ export const setSearchResult = payload =>
 export const search = value =>
   action(actions.DO_SEARCH, { value })
 
+export const createTopic = props =>
+  action(actions.CREATE_TOPIC, { props })
+
 export const addTopic = (key, topic) =>
   action(actions.ADD_TOPIC, { key, topic })

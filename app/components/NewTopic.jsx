@@ -91,7 +91,7 @@ export default class NewTopic extends Component {
 
           <div style={ styles.row } >
             <label htmlFor='name' style={ styles.label }>
-              Short name
+              Short name. This field will be change infoHash.
             </label>
             <input
               name='name'
