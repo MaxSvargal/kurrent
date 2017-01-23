@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
+import { h, div, form, label, input, button } from 'react-hyperscript-helpers'
 import { withRouter } from 'react-router'
 import { Style } from 'radium'
 import ReactQuill from 'react-quill'
@@ -69,86 +70,48 @@ export default class NewTopic extends Component {
     const { tags, files, keywords, showCatalogPopup } = this.state
     const styles = this.getStyles()
 
-    return (
-      <div style={ styles.root } >
-        <TopBar>
-          <TopBarBackLink />
-        </TopBar>
-        <form id='topicForm' >
-
-          <div style={ styles.row } >
-            <div style={ styles.flexRow } >
-              { files.length > 0 &&
-                <div style={ styles.filesList } >
-                  <FilesList files={ files } />
-                </div>
-              }
-              <div style={ styles.dropFilesBox } >
-                <DragDrop onDrop={ this.onDropFiles } />
-              </div>
-            </div>
-          </div>
-
-          <div style={ styles.row } >
-            <label htmlFor='name' style={ styles.label }>
-              Short name. This field will be change infoHash.
-            </label>
-            <input
-              name='name'
-              style={ styles.textInput }
-              onChange={ this.onNameInputChange } />
-          </div>
-
-          <div style={ styles.row } >
-            <label htmlFor='tags' style={ styles.label }>
-              Tags for cataloging
-            </label>
-            <div style={ styles.flexRow } >
-              <button
-                type='button'
-                style={ styles.addTagsBtn }
-                onClick={ this.onAddTagClick } >
-                +
-              </button>
-              <input
-                name='tags'
-                value={ tags.join(', ') }
-                style={ styles.textInput } />
-              <div style={ styles.dropDownBox(showCatalogPopup) } >
-                <DropDownList onSelect={ this.onSelectTag } />
-              </div>
-            </div>
-          </div>
-
-          <div style={ styles.row } >
-            <label htmlFor='keywords' style={ styles.label }>
-              Keywords for search
-            </label>
-            <input
-              name='keywords'
-              value={ keywords }
-              onChange={ this.onKeywordsInputChange }
-              style={ styles.textInput } />
-          </div>
-
-          <div style={ styles.row } >
-            <Style rules={ styles.quill } />
-            <ReactQuill
-              onChange={ this.onChangeBody }
-              theme='snow' />
-          </div>
-
-          <div style={ styles.row } >
-            <button
-              type='submit'
-              style={ styles.submitBtn }
-              onClick={ this.onSubmitHandle }>
-              Create
-            </button>
-          </div>
-        </form>
-      </div>
-    )
+    return div({ style: styles.root }, [
+      h(TopBar, [
+        h(TopBarBackLink)
+      ]),
+      form([
+        div({ style: styles.row }, [
+          div({ style: styles.flexRow }, [
+            files.length > 0 && div({ style: styles.filesList }, [
+              h(FilesList, { files })
+            ]),
+            div({ style: styles.dropFilesBox }, [
+              h(DragDrop, { onDrop: this.onDropFiles })
+            ])
+          ])
+        ]),
+        div({ style: styles.row }, [
+          label({ htmlFor: 'name', style: styles.label }, 'Short name. This field will be change infoHash.'),
+          input({ name: 'name', style: styles.textInput, onChange: this.onNameInputChange })
+        ]),
+        div({ style: styles.row }, [
+          label({ htmlFor: 'tags', style: styles.label }, 'Tags for cataloging.'),
+          div({ style: styles.flexRow }, [
+            button({ type: 'button', style: styles.addTagsBtn, onClick: this.onAddTagClick }, '+'),
+            input({ name: 'tags', style: styles.textInput, value: tags.join(', ') }),
+            div({ style: styles.dropDownBox(showCatalogPopup) }, [
+              h(DropDownList, { onSelect: this.onSelectTag })
+            ])
+          ])
+        ]),
+        div({ style: styles.row }, [
+          label({ style: styles.label, htmlFor: 'keywords' }, 'Keywords for search'),
+          input({ style: styles.textInput, name: 'keywords', value: keywords, onChange: this.onKeywordsInputChange })
+        ]),
+        div({ style: styles.row }, [
+          h(Style, { rules: styles.quill }),
+          h(ReactQuill, { theme: 'snow', onChange: this.onChangeBody })
+        ]),
+        div({ style: styles.row }, [
+          button({ type: 'submit', style: styles.submitBtn, onClick: this.onSubmitHandle }, 'Create')
+        ])
+      ])
+    ])
   }
 
   getStyles() {
