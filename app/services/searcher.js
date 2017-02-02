@@ -1,9 +1,9 @@
 const splitByWhitespace = str => str.split(' ')
 
 const objectToArrayOfSplittedStrings = obj =>
-  Object.keys(obj).map(k => [ Number(k), splitByWhitespace(obj[k]) ])
+  Object.keys(obj).map(k => [ k, splitByWhitespace(obj[k]) ])
 
-const searchInData = (entities: [], req: []) =>
+const searchInData = (entities, req) =>
   entities.map(e => [ e[0], e[1].map(w => req.map(r => w.search(r))) ])
 
 const simplifyFound = entities =>
@@ -12,17 +12,16 @@ const simplifyFound = entities =>
 const makeWeights = entities =>
   entities.map(e => [ e[0], e[1].reduce(((out, v, i) => out + (v / (i + 1))), 0) ])
 
-const arrayWeightsToObject = entities =>
-  entities.reduce(((obj, arr) => ({ ...obj, [arr[0]]: arr[1] })), {})
+const getSortedIds = entities =>
+  entities.sort().reverse().filter(e => e[1] !== 0).map(e => e[0])
 
-
-export default function search(data: { [key: string]: {} }, request: string) {
+export default function search(data: { [key: string]: string }, request: string) {
   const requestWords = splitByWhitespace(request)
   const dataWords = objectToArrayOfSplittedStrings(data)
   const entities = searchInData(dataWords, requestWords)
   const simplyEntries = simplifyFound(entities)
   const weights = makeWeights(simplyEntries)
-  const output = arrayWeightsToObject(weights)
+  const sortedIds = getSortedIds(weights)
 
-  return output
+  return sortedIds
 }

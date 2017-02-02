@@ -2,6 +2,7 @@ import { fork, call, put, take, select, throttle } from 'redux-saga/effects'
 
 import Kad from 'services/kad'
 import TorrentDHT from 'services/dht'
+import search from 'services/searcher'
 import { compress, decompress } from 'services/zlib'
 import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
@@ -67,12 +68,10 @@ export function* doSearchHandle({ value }) {
     if (value.length < 3) return
 
     const meta = yield select(selectSearchIndex)
-    const searchRegExp = new RegExp(`(?=${value}){3,}.*$`, 'i')
-    const finded = Object.keys(meta).reduce((arr, id) =>
-      (meta[id].search(searchRegExp) !== -1 ? [ ...arr, id ] : arr), [])
-    yield put(setSearchResult(finded))
+    const searchResult = search(meta, value)
+    yield put(setSearchResult(searchResult))
 
-    const missed = yield select(getMissedTopics, finded)
+    const missed = yield select(getMissedTopics, searchResult)
     for (const key in missed) yield fork(getTopic, missed[key])
   } catch (err) {
     yield put(errorMessage(err, DO_SEARCH))
@@ -114,7 +113,7 @@ export function* initial() {
   }
 }
 
-export function* search() {
+export function* searchSaga() {
   yield throttle(600, DO_SEARCH, doSearchHandle)
 }
 
@@ -140,7 +139,7 @@ export function* putTopicWatcher() {
 export default function* startupSagas() {
   yield [
     fork(initial),
-    fork(search),
+    fork(searchSaga),
     fork(putTopicWatcher)
   ]
 }

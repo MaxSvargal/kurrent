@@ -3,16 +3,16 @@ import search from '../../app/services/searcher'
 // import search from 'services/searcher'
 
 const searchIndex = {
-  0: 'zero',
-  1: 'title one',
-  2: 'title two',
-  3: 'title three',
-  4: 'titles some marker',
-  5: 'titles marker'
+  '0e': 'zero',
+  '1e': 'title one',
+  '2e': 'title two',
+  '3e': 'title three',
+  '4e': 'titles some marker',
+  '5e': 'titles marker'
 }
 
-test('search service', t => {
+test('search by partial-word', t => {
   t.deepEqual(
-    search(searchIndex, 'title marker'),
-    { 0: 0, 1: 1, 2: 1, 3: 1, 4: 1.3333333333333333, 5: 1.5 })
+    search(searchIndex, 'marker titl'),
+    [ '5e', '4e', '3e', '2e', '1e' ])
 })
