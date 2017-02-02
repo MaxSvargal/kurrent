@@ -5,9 +5,9 @@ import { eventChannel } from 'redux-saga'
 import KadUDPStunTransport from './kadUDPStunTransport'
 
 export default class Kad {
-  constructor(props: { address: string, port: number }): {} {
-    const contact = kad.contacts.AddressPortContact(props)
-    const transport = new KadUDPStunTransport(contact)
+  constructor({ address, port, stun = true }): {} {
+    const contact = kad.contacts.AddressPortContact({ address, port })
+    const transport = stun ? new KadUDPStunTransport(contact) : kad.transports.UDP(contact)
     const storage = new kad.storage.LocalStorage('kad')
     const logger = new kad.Logger(0)
 
