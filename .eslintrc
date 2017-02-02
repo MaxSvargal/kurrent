@@ -19,6 +19,7 @@
         "componentWillUpdate",
         "getStyles"
     ]}],
+    "guard-for-in": 0,
     "flowtype-errors/show-errors": 2,
     "generator-star-spacing": "off",
     "import/no-extraneous-dependencies": "off",
@@ -37,9 +38,9 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/jsx-no-bind": "off",
     "react/prefer-stateless-function": "off",
-    "react/no-unused-prop-types": 0, # bug https://github.com/yannickcr/eslint-plugin-react/issues/847
+    "react/no-unused-prop-types": 0,
     "react/sort-comp": [1, {
-      order: [
+      "order": [
         "type-annotations",
         "static-methods",
         "everything-else",

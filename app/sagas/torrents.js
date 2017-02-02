@@ -1,5 +1,5 @@
 import { fork, call, put, take } from 'redux-saga/effects'
-import { seed, add, onTorrentAdd } from 'services/torrents'
+import { seed, onTorrentAdd } from 'services/torrents'
 
 import { addTopic } from 'actions/topics'
 import { addTorrent } from 'actions/torrents'

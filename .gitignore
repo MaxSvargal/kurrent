@@ -1,5 +1,6 @@
 # Logs
 logs
+.nyc_output
 *.log
 
 # Runtime data

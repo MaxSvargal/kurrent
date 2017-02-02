@@ -134,7 +134,7 @@ import { fork, select, take, call, put } from 'redux-saga/effects'
 import fetch from 'sagas/api'
 import { getAuthToken } from 'sagas/selectors'
 import { itemRequest, itemsRequest } from 'sagas/requests'
-import { requestSubItemsOf } from 'sagas/subItems'
+import { requestSubItems } from 'sagas/subItems'
 
 import { setItems, reloadCount } from 'actions/items'
 import { GET_ITEM } from 'actions/types'
