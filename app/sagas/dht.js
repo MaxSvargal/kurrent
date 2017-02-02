@@ -8,11 +8,11 @@ import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
 import { errorMessage } from 'actions/utils'
 import { addTopic, setSearchIndex, setSearchResult, setPeersNum } from 'actions/topics'
-import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, ADD_TOPIC, ERROR_MESSAGE } from 'actions/types'
+import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, ADD_TOPIC } from 'actions/types'
 
 import bootstrapList from 'bootstrap.json'
 
-const params = { address: '127.0.0.1', port: 1333 }
+const params = { address: '127.0.0.1', port: 1333, stun: false }
 const kad = new Kad(params)
 const dht = new TorrentDHT()
 
@@ -30,18 +30,14 @@ export function* listenStoreChannel() {
   }
 }
 
-export function* getTopicsFromIndex(searchIndex) {
-  /* eslint guard-for-in: 0 */
-  /* eslint no-restricted-syntax: 0 */
-  for (const key in searchIndex) yield fork(getTopic, key)
-}
-
 export function* getSearchIndex() {
   try {
     const compressed = yield call(kad.get, 'searchIndex')
     const searchIndex = yield call(decompress, compressed)
+    console.log({ searchIndex })
     yield put(setSearchIndex(searchIndex))
-    // yield fork(getTopicsFromIndex, searchIndex)
+    // fetch all topics from searchIndex
+    // for (const key in searchIndex) yield fork(getTopic, key)
   } catch (err) {
     yield put(errorMessage(err, SET_SEARCH_INDEX))
   }
@@ -81,33 +77,37 @@ export function* doSearchHandle({ value }) {
 export function* connectPeer(address, port) {
   try {
     yield call(kad.connect, { address, port })
+    yield fork(peerConnectState, true)
   } catch (err) {
     yield put(errorMessage(err, 'connectPeer'))
+    yield fork(peerConnectState, false)
   }
 }
 
-export function* awaitPeersConnectErrors() {
-  let connectErrorsNum = 0
-  while (true) {
-    const { errorActionType } = yield take(ERROR_MESSAGE)
-    if (errorActionType === 'connectPeer') connectErrorsNum += 1
-    if (connectErrorsNum >= bootstrapList.length) {
-      yield put(errorMessage(true, 'allPeersConnectFailed'))
-    }
+let connectErrorsNum = 0
+let connectedNum = 0
+const peersNum = bootstrapList.length
+
+export function* peerConnectState(state: bool) {
+  if (state) connectedNum += 1
+  else connectErrorsNum += 1
+
+  if (connectErrorsNum === peersNum) {
+    yield put(errorMessage(true, 'allPeersConnectFailed'))
+  }
+
+  if (connectedNum >= 1) {
+    yield fork(getSearchIndex)
   }
 }
 
 
-export function* initial() {
+export function* connectBootstrapPeers() {
   try {
     for (const peer of bootstrapList) {
       const [ address, port ] = peer.split(':')
       yield fork(connectPeer, address, Number(port))
     }
-    yield fork(awaitPeersConnectErrors)
-
-    yield fork(getSearchIndex)
-    yield fork(listenStoreChannel)
   } catch (err) {
     yield put(errorMessage(err, 'initialDHT'))
   }
@@ -138,7 +138,8 @@ export function* putTopicWatcher() {
 
 export default function* startupSagas() {
   yield [
-    fork(initial),
+    fork(connectBootstrapPeers),
+    fork(listenStoreChannel),
     fork(searchSaga),
     fork(putTopicWatcher)
   ]
