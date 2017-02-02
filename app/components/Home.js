@@ -8,6 +8,7 @@ import TagsLinks from './TagsLinks'
 import TopBar from './TopBar'
 import TopBarHome from './TopBarHome'
 import TopicsList from './TopicsList'
+import ErrorMessage from './ErrorMessage'
 
 export default class Home extends Component {
   props: {
@@ -24,11 +25,13 @@ export default class Home extends Component {
     ids: string[],
     finded: string[],
     peersNum: {},
+    allPeersConnectFailed: ?[],
     search: () => void
   }
 
   render() {
-    const { entities, ids, finded, peersNum } = this.props
+    const { entities, ids, finded, peersNum, allPeersConnectFailed: connError } = this.props
+    const lastError = connError && connError[connError.length - 1]
     const styles = this.getStyles()
     const tags = [ ...new Set(
       Object.keys(entities).reduce((arr, key) =>
@@ -48,6 +51,9 @@ export default class Home extends Component {
           entities={ entities }
           ids={ finded }
           peersNum={ peersNum } />
+
+        { lastError === true &&
+          <ErrorMessage message='The all connections to peers are failed. You have no connection :(' /> }
 
         { finded.length === 0 &&
           <TagsLinks tags={ tags } /> }

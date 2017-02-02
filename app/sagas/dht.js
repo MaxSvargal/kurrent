@@ -7,7 +7,7 @@ import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
 
 import { errorMessage } from 'actions/utils'
 import { addTopic, setSearchIndex, setSearchResult, setPeersNum } from 'actions/topics'
-import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, ADD_TOPIC } from 'actions/types'
+import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, ADD_TOPIC, ERROR_MESSAGE } from 'actions/types'
 
 import bootstrapList from 'bootstrap.json'
 
@@ -62,19 +62,6 @@ export function* getTopic(key) {
   }
 }
 
-export function* initial() {
-  try {
-    for (const peer of bootstrapList) {
-      const [ address, port ] = peer.split(':')
-      yield fork(kad.connect, { address, port: Number(port) })
-    }
-    yield fork(getSearchIndex)
-    yield fork(listenStoreChannel)
-  } catch (err) {
-    yield put(errorMessage(err, 'initialDHT'))
-  }
-}
-
 export function* doSearchHandle({ value }) {
   try {
     if (value.length < 3) return
@@ -89,6 +76,41 @@ export function* doSearchHandle({ value }) {
     for (const key in missed) yield fork(getTopic, missed[key])
   } catch (err) {
     yield put(errorMessage(err, DO_SEARCH))
+  }
+}
+
+export function* connectPeer(address, port) {
+  try {
+    yield call(kad.connect, { address, port })
+  } catch (err) {
+    yield put(errorMessage(err, 'connectPeer'))
+  }
+}
+
+export function* awaitPeersConnectErrors() {
+  let connectErrorsNum = 0
+  while (true) {
+    const { errorActionType } = yield take(ERROR_MESSAGE)
+    if (errorActionType === 'connectPeer') connectErrorsNum += 1
+    if (connectErrorsNum >= bootstrapList.length) {
+      yield put(errorMessage(true, 'allPeersConnectFailed'))
+    }
+  }
+}
+
+
+export function* initial() {
+  try {
+    for (const peer of bootstrapList) {
+      const [ address, port ] = peer.split(':')
+      yield fork(connectPeer, address, Number(port))
+    }
+    yield fork(awaitPeersConnectErrors)
+
+    yield fork(getSearchIndex)
+    yield fork(listenStoreChannel)
+  } catch (err) {
+    yield put(errorMessage(err, 'initialDHT'))
   }
 }
 
