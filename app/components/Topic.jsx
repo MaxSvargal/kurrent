@@ -8,29 +8,27 @@ export default class Topic extends Component {
   props: {
     id: string,
     topic: {
-      title: string,
-      desc: string,
-      likes: number,
-      dislikes: number,
-      magnet: string
+      name: string,
+      body: string,
+      magnetURI: string
     },
     downloadMagnet: () => void
   }
 
   render() {
-    const { id, topic, downloadMagnet } = this.props
-    const { title, desc, likes, dislikes, magnet } = topic || {}
+    const { topic, downloadMagnet } = this.props
+    const { name, body, magnetURI } = topic || {}
     const styles = this.getStyles()
 
     return (
       <div style={ styles.root } >
         <TopBarBackLink />
         <div style={ styles.container } >
-          <h1>{ title }</h1>
-          <div>{ desc }</div>
+          <h1>{ name }</h1>
+          <div>{ body }</div>
           <button
             style={ styles.btn }
-            onClick={ () => downloadMagnet(magnet) } >
+            onClick={ () => downloadMagnet(magnetURI) } >
             Download
           </button>
         </div>

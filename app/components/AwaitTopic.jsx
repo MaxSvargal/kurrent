@@ -14,7 +14,7 @@ export default class AwaitTopic extends Component {
 
   componentWillReceiveProps(props) {
     const { id, entities, router } = props
-    entities[id] && router.replace('/torrents')
+    entities[id] && router.replace(`/topics/${id}`)
   }
 
   render() {
