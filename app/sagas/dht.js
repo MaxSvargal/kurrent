@@ -120,9 +120,20 @@ export function* search() {
 
 export function* putTopicWatcher() {
   while (true) {
-    const { key, topic } = yield take(ADD_TOPIC)
-    const compressed = yield call(compress, topic)
-    yield call(kad.put, key, compressed)
+    try {
+      const { key, topic } = yield take(ADD_TOPIC)
+
+      // send topic
+      const compressedTopic = yield call(compress, topic)
+      yield call(kad.put, key, compressedTopic)
+
+      // send search index
+      const searchIndex = yield select(selectSearchIndex)
+      const compressedSearchIndex = yield call(compress, searchIndex)
+      yield call(kad.put, 'searchIndex', compressedSearchIndex)
+    } catch (err) {
+      yield put(errorMessage(err), ADD_TOPIC)
+    }
   }
 }
 

@@ -12,8 +12,13 @@ export const ids = (state = [], { type, key }: reducerArgs) =>
 export const finded = (state = [], { type, payload }: reducerArgs) =>
   type === SET_SEARCH_RESULT ? payload : state
 
-export const searchIndex = (state = {}, { type, payload }: reducerArgs) =>
-  type === SET_SEARCH_INDEX ? payload : state
+export const searchIndex = (state = {}, { type, payload, key, topic }: reducerArgs) => {
+  switch (type) {
+    case SET_SEARCH_INDEX: return payload
+    case ADD_TOPIC: return { ...state, [key]: topic.keywords }
+    default: return state
+  }
+}
 
 export const peersNum = (state = {}, { type, payload }: reducerArgs) =>
   type === SET_PEERS_NUM ? { ...state, [payload.key]: payload.peersNum } : state
