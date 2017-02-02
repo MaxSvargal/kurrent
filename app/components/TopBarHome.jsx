@@ -5,12 +5,13 @@ import colors from 'styles/colors'
 
 export default class TopBarHome extends Component {
   props: {
-    indexSize: number
+    indexSize: number,
+    error: ?bool
   }
 
   render() {
-    const { indexSize } = this.props
-    const styles = this.getStyles()
+    const { indexSize, error } = this.props
+    const styles = this.getStyles({ error })
 
     return (
       <div style={ styles.root }>
@@ -20,10 +21,10 @@ export default class TopBarHome extends Component {
     )
   }
 
-  getStyles() {
+  getStyles({ error }) {
     return {
       root: {
-        background: colors.primary,
+        background: error ? '#b7414f' : colors.primary,
         color: '#fff',
         width: '100%',
         display: 'flex',
@@ -31,7 +32,7 @@ export default class TopBarHome extends Component {
         justifyContent: 'space-between'
       },
       btn: {
-        background: '#a0be11',
+        background: error ? '#56585a' : '#a0be11',
         border: 0,
         color: '#fff',
         fontSize: '.8rem',

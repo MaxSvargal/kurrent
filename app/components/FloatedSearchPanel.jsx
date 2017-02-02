@@ -14,7 +14,7 @@ class FloatedSearchPanel extends Component {
     value.length > 0 && this.props.onChange(value)
 
   render() {
-    const isResultsIsset = this.props.anyFinded && this.input.value.length > 0
+    const isResultsIsset = this.props.anyFinded && this.input && this.input.value.length > 0
     const styles = this.getStyles(isResultsIsset)
 
     return (

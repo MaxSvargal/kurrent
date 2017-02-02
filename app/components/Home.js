@@ -40,7 +40,9 @@ export default class Home extends Component {
     return (
       <div style={ styles.root }>
         <TopBar>
-          <TopBarHome indexSize={ ids.length } />
+          <TopBarHome
+            indexSize={ ids.length }
+            error={ Boolean(lastError) } />
         </TopBar>
 
         <FloatedSearchPanel
