@@ -34,7 +34,6 @@ export function* getSearchIndex() {
   try {
     const compressed = yield call(kad.get, 'searchIndex')
     const searchIndex = yield call(decompress, compressed)
-    console.log({ searchIndex })
     yield put(setSearchIndex(searchIndex))
     // fetch all topics from searchIndex
     // for (const key in searchIndex) yield fork(getTopic, key)

@@ -171,7 +171,6 @@
     "electron-debug": "^1.1.0",
     "ip": "^1.1.4",
     "kad": "^1.6.4",
-    "kad-traverse": "0.0.4",
     "magnet-uri": "^5.1.5",
     "parse-torrent": "^5.8.1",
     "quill": "^1.1.8",
@@ -183,8 +182,8 @@
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.7",
     "redux": "^3.6.0",
-    "redux-saga": "^0.13.0",
     "source-map-support": "^0.4.6",
+    "stun-js": "^0.5.1",
     "webtorrent": "^0.98.0"
   },
   "devEngines": {

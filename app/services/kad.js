@@ -9,7 +9,7 @@ export default class Kad {
     const contact = kad.contacts.AddressPortContact({ address, port })
     const transport = stun ? new KadUDPStunTransport(contact) : kad.transports.UDP(contact)
     const storage = new kad.storage.LocalStorage('kad')
-    const logger = new kad.Logger(0)
+    const logger = new kad.Logger(3)
 
     this.dht = new kad.Node({ transport, storage, logger })
     this.events = new EventEmitter()
