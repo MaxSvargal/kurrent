@@ -24,24 +24,29 @@ export default class Home extends Component {
     },
     ids: string[],
     finded: string[],
+    searchIndexLen: number,
     peersNum: {},
     allPeersConnectFailed: ?[],
     search: () => void
   }
 
   render() {
-    const { entities, ids, finded, peersNum, allPeersConnectFailed: connError } = this.props
+    const {
+      entities, ids, finded, peersNum,
+      searchIndexLen, allPeersConnectFailed: connError
+    } = this.props
+
     const lastError = connError && connError[connError.length - 1]
     const styles = this.getStyles()
-    const tags = [ ...new Set(
-      Object.keys(entities).reduce((arr, key) =>
-        arr.concat(entities[key].tags), [])) ]
+    const tags = [ ...new Set(ids.reduce((arr, key) =>
+      arr.concat(entities[key].tags), [])) ]
 
     return (
       <div style={ styles.root }>
         <TopBar>
           <TopBarHome
-            indexSize={ ids.length }
+            indexSize={ searchIndexLen }
+            finded={ finded.length }
             error={ Boolean(lastError) } />
         </TopBar>
 

@@ -6,17 +6,21 @@ import colors from 'styles/colors'
 export default class TopBarHome extends Component {
   props: {
     indexSize: number,
+    finded: number,
     error: ?bool
   }
 
   render() {
-    const { indexSize, error } = this.props
+    const { indexSize, finded, error } = this.props
     const styles = this.getStyles({ error })
 
     return (
       <div style={ styles.root }>
         <Link to='/topics/new' style={ styles.btn }>+ torrent</Link>
-        <div style={ styles.stats }>{ indexSize } topics in index</div>
+        <div style={ styles.stats }>
+          { finded > 0 && <span>{ finded } results found | </span> }
+          { indexSize } topics in index
+        </div>
       </div>
     )
   }

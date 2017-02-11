@@ -44,11 +44,6 @@ export default class TopicsResultMessages extends Component {
 
     return (
       <div>
-        { finded > 0 && finded === isset &&
-          <div style={ styles.findedBar }>
-            Found { finded } results
-          </div>
-        }
         { finded !== isset &&
           <div style={ styles.onProccessBox } >
             <div style={ styles.finded }>Found { finded } results</div>
@@ -62,10 +57,9 @@ export default class TopicsResultMessages extends Component {
   getStyles() {
     return {
       findedBar: {
-        padding: '.5rem 8rem',
         fontSize: '.9rem',
-        color: '#3a8c99',
-        background: '#1b4660'
+        color: '#fff',
+        textAlign: 'right'
       },
       onProccessBox: {
         textAlign: 'center',

@@ -51,13 +51,13 @@ class TopicsList extends Component {
                 </div>
                 <div>
                   <span style={ styles.title } >
-                    { topic.title }
+                    { topic.name }
                   </span>
                   { topic.peersNum &&
                     <span style={ styles.peersNum }>
                       Peers: <strong>{ topic.peersNum }</strong>
                     </span> }
-                  <p>{ topic.desc }</p>
+                  <p>{ topic.body }</p>
                 </div>
               </RLink>
             )) }
