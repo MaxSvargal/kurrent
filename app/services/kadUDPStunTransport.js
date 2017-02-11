@@ -24,18 +24,17 @@ export default class KadUDPStunTransport extends kad.transports.UDP {
       const transport = new transports.UDP(socket)
       const client = new StunClient(stunServer.address, stunServer.port, transport)
 
-      const sendBindRequest = () => {
+      client.init(() =>
         client.bindP().then(({ address, port }) => {
           this._contact.address = address
           this._contact.port = port
           this._socket = socket
-          client.closeP()
-          return done()
+          return client.closeP()
         })
+        .then(done)
         .catch(err =>
           console.error({ err }))
-      }
-      sendBindRequest(client, socket)
+      )
     })
 
     socket.bind(this._contact.port)
