@@ -5,14 +5,11 @@ import TorrentDHT from 'services/dht'
 import search from 'services/searcher'
 import { compress, decompress } from 'services/zlib'
 import { selectSearchIndex, getMissedTopics } from 'sagas/selectors'
-
-import { errorMessage } from 'actions/utils'
-import { addTopic, setSearchIndex, setSearchResult, setPeersNum } from 'actions/topics'
-import { SET_SEARCH_INDEX, SET_TOPIC, DO_SEARCH, ADD_TOPIC } from 'actions/types'
+import { addTopic, setSearchIndex, setSearchResult, setPeersNum, doSearch, errorMessage } from 'actions'
 
 import bootstrapList from 'bootstrap.json'
 
-const params = { address: '127.0.0.1', port: 1333, stun: false }
+const params = { address: '127.0.0.1', port: 1333, stun: true }
 const kad = new Kad(params)
 const dht = new TorrentDHT()
 
@@ -38,7 +35,7 @@ export function* getSearchIndex() {
     // fetch all topics from searchIndex
     // for (const key in searchIndex) yield fork(getTopic, key)
   } catch (err) {
-    yield put(errorMessage(err, SET_SEARCH_INDEX))
+    yield put(errorMessage(err, setSearchIndex.getType()))
   }
 }
 
@@ -54,7 +51,7 @@ export function* getTopic(key) {
     yield put(addTopic(key, topic))
     yield call(requestPeersNum, key, topic.magnetURI)
   } catch (err) {
-    yield put(errorMessage(err, SET_TOPIC))
+    yield put(errorMessage(err, addTopic.getType()))
   }
 }
 
@@ -69,7 +66,7 @@ export function* doSearchHandle({ value }) {
     const missed = yield select(getMissedTopics, searchResult)
     for (const key in missed) yield fork(getTopic, missed[key])
   } catch (err) {
-    yield put(errorMessage(err, DO_SEARCH))
+    yield put(errorMessage(err, doSearch.getType()))
   }
 }
 
@@ -113,13 +110,13 @@ export function* connectBootstrapPeers() {
 }
 
 export function* searchSaga() {
-  yield throttle(600, DO_SEARCH, doSearchHandle)
+  yield throttle(600, doSearch.getType(), doSearchHandle)
 }
 
 export function* putTopicWatcher() {
   while (true) {
     try {
-      const { key, topic } = yield take(ADD_TOPIC)
+      const { payload: { key, topic } } = yield take(addTopic)
 
       // send topic
       const compressedTopic = yield call(compress, topic)
@@ -130,7 +127,7 @@ export function* putTopicWatcher() {
       const compressedSearchIndex = yield call(compress, searchIndex)
       yield call(kad.put, 'searchIndex', compressedSearchIndex)
     } catch (err) {
-      yield put(errorMessage(err), ADD_TOPIC)
+      yield put(errorMessage(err, addTopic.getType()))
     }
   }
 }

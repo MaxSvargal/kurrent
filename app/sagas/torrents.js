@@ -1,10 +1,6 @@
 import { fork, call, put, take } from 'redux-saga/effects'
 import { seed, add, onTorrentAdd, onTorrentError } from 'services/torrents'
-
-import { addTopic } from 'actions/topics'
-import { addTorrent } from 'actions/torrents'
-import { errorMessage } from 'actions/utils'
-import { CREATE_TOPIC, DOWNLOAD_MAGNET } from 'actions/types'
+import { addTopic, createTopic, addTorrent, downloadMagnet, errorMessage } from 'actions'
 
 const filterFilesProps = files =>
   files.map(({ length, name, offset }) => ({ length, name, offset }))
@@ -12,12 +8,10 @@ const filterFilesProps = files =>
 export function* create() {
   while (true) {
     try {
-      const { props } = yield take(CREATE_TOPIC)
-      const { body, keywords, name, tags, files: filesList } = props
+      const { payload } = yield take(createTopic)
+      const { body, keywords, name, tags, files: filesList } = payload
 
       const torrent = yield call(seed, name, filesList)
-      console.log(torrent.metadata.toString('base64'))
-
       const {
         length,
         magnetURI,
@@ -33,7 +27,7 @@ export function* create() {
       yield put(addTopic(key, topic))
       yield put(addTorrent(key, torrent))
     } catch (err) {
-      yield put(errorMessage(err, CREATE_TOPIC))
+      yield put(errorMessage(err, createTopic.getType()))
     }
   }
 }
@@ -64,10 +58,10 @@ export function* listenTorrentError() {
 }
 
 
-export function* downloadMagnet() {
+export function* downloadMagnetSaga() {
   while (true) {
     try {
-      const { payload: { magnetURI } } = yield take(DOWNLOAD_MAGNET)
+      const { payload: { magnetURI } } = yield take(downloadMagnet)
       console.log('dl', magnetURI)
       const torrent = yield call(add, magnetURI)
       console.log({ torrent })
@@ -82,6 +76,6 @@ export default function* torrents() {
     fork(create),
     fork(listenTorrentAdd),
     fork(listenTorrentError),
-    fork(downloadMagnet)
+    fork(downloadMagnetSaga)
   ]
 }

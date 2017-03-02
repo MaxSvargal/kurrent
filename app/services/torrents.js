@@ -21,3 +21,8 @@ export const onTorrentAdd = () => eventChannel(emitter => {
   client.on('torrent', emitter)
   return () => {} // no unsubscriber
 })
+
+export const onTorrentError = () => eventChannel(emitter => {
+  client.on('error', emitter)
+  return () => {} // no unsubscriber
+})

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { search } from 'actions/topics'
+import { doSearch } from 'actions'
 import Home from 'components/Home'
 
 export default connect(
@@ -15,5 +15,5 @@ export default connect(
       allPeersConnectFailed,
       searchIndexLen: Object.keys(searchIndex).length
     }),
-  { search }
+  { doSearch }
 )(Home)

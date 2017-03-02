@@ -27,12 +27,12 @@ export default class Home extends Component {
     searchIndexLen: number,
     peersNum: {},
     allPeersConnectFailed: ?[],
-    search: () => void
+    doSearch: () => void
   }
 
   render() {
     const {
-      entities, ids, finded, peersNum,
+      entities, ids, finded, peersNum, doSearch,
       searchIndexLen, allPeersConnectFailed: connError
     } = this.props
 
@@ -51,7 +51,7 @@ export default class Home extends Component {
         </TopBar>
 
         <FloatedSearchPanel
-          onChange={ this.props.search }
+          onChange={ doSearch }
           anyFinded={ finded.length > 0 } />
 
         <TopicsList

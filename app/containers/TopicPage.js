@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { downloadMagnet } from 'actions/torrents'
+import { downloadMagnet } from 'actions'
 import Topic from 'components/Topic'
 
 export default connect(
